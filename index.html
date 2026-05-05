@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cocoa Business — Variable Salary · NexoCorp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:       #1a0d3b;
+  --purple:    #684fa3;
+  --purple-lo: rgba(104,79,163,0.08);
+  --purple-md: rgba(104,79,163,0.18);
+  --purple-lt: #8b72c4;
+  --orange:    #efa345;
+  --green:     #1a9e75;
+  --green-lo:  rgba(26,158,117,0.09);
+  --red:       #c83c3c;
+  --red-lo:    rgba(200,60,60,0.08);
+  --teal:      #0b9d98;
+  --teal-lo:   rgba(11,157,152,0.09);
+  --bg:        #f3f1f9;
+  --surface:   #ffffff;
+  --border:    #e2dced;
+  --border-str:#c8bfe6;
+  --label:     #7a6d99;
+  --muted:     #a398c0;
+  --mono:      'DM Mono', monospace;
+  --sans:      'Montserrat', sans-serif;
+  --r:         10px;
+  --r-sm:      6px;
+  --sh:        0 1px 3px rgba(26,13,59,0.06), 0 4px 14px rgba(26,13,59,0.05);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:14px;line-height:1.6;}
+
+/* HEADER */
+.hdr{background:var(--ink);border-bottom:1px solid rgba(255,255,255,0.05);}
+.hdr-inner{max-width:1120px;margin:0 auto;padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+.logo-group{display:flex;align-items:center;gap:12px;}
+.logo-svg{height:24px;width:auto;}
+.logo-sep{width:1px;height:18px;background:rgba(255,255,255,0.12);}
+.logo-badge{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--orange);}
+.hdr-right{text-align:right;}
+.hdr-label{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.28);margin-bottom:1px;}
+.hdr-name{font-size:13px;font-weight:700;color:#fff;}
+.hdr-sub{font-size:11px;color:rgba(255,255,255,0.32);}
+
+/* HOLDING STRIP */
+.hstrip{background:rgba(255,255,255,0.025);border-bottom:1px solid rgba(255,255,255,0.05);}
+.hstrip-inner{max-width:1120px;margin:0 auto;padding:7px 2rem;display:flex;gap:6px;flex-wrap:wrap;}
+.hpill{font-size:10px;font-weight:600;padding:3px 10px;border-radius:100px;letter-spacing:0.05em;text-transform:uppercase;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.35);}
+.hpill.on{background:rgba(104,79,163,0.28);border-color:rgba(139,114,196,0.4);color:#cbbfea;}
+
+/* HERO */
+.hero{background:var(--ink);padding:2.5rem 2rem 3rem;}
+.hero-inner{max-width:1120px;margin:0 auto;}
+.hero-eyebrow{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:rgba(255,255,255,0.28);margin-bottom:14px;}
+.hero-h1{font-size:28px;font-weight:800;color:#fff;line-height:1.22;margin-bottom:10px;max-width:720px;}
+.hero-h1 em{font-style:normal;color:var(--orange);}
+.hero-sub{font-size:13px;color:rgba(255,255,255,0.4);max-width:560px;line-height:1.8;margin-bottom:2rem;}
+.hero-sub strong{color:rgba(255,255,255,0.6);font-weight:600;}
+.kpi-row{display:flex;gap:1px;background:rgba(255,255,255,0.05);border-radius:var(--r);overflow:hidden;}
+.kpi{flex:1;padding:16px 18px;background:rgba(255,255,255,0.025);}
+.kpi-val{font-family:var(--mono);font-size:17px;font-weight:500;color:rgba(255,255,255,0.75);margin-bottom:4px;}
+.kpi-val.accent{color:var(--orange);font-size:21px;}
+.kpi-val.pos{color:#4de8b0;}
+.kpi-lbl{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.09em;color:rgba(255,255,255,0.25);}
+
+/* MAIN */
+.main{max-width:1120px;margin:0 auto;padding:2.5rem 1.5rem 5rem;}
+.sec-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin-bottom:12px;padding-bottom:9px;border-bottom:1px solid var(--border);}
+
+/* BU BAR */
+.bu-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 1.25rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:1rem;box-shadow:var(--sh);}
+.bu-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);white-space:nowrap;}
+.bu-btns{display:flex;gap:5px;flex-wrap:wrap;}
+.bu-btn{font-family:var(--sans);font-size:11px;font-weight:600;padding:5px 13px;border-radius:var(--r-sm);border:1px solid var(--border);background:transparent;color:var(--label);cursor:pointer;transition:all .12s;}
+.bu-btn:hover,.bu-btn.active{background:var(--purple-lo);border-color:var(--purple);color:var(--purple);}
+
+/* SCENARIOS */
+.sc-row{display:flex;gap:6px;margin-bottom:1.25rem;flex-wrap:wrap;}
+.sc-btn{font-family:var(--sans);font-size:11.5px;font-weight:600;padding:8px 18px;border-radius:100px;border:1.5px solid var(--border-str);background:transparent;color:var(--label);cursor:pointer;transition:all .12s;}
+.sc-btn:hover{border-color:var(--purple);color:var(--purple);}
+.sc-btn.active{background:var(--purple);border-color:var(--purple);color:#fff;box-shadow:0 2px 12px rgba(104,79,163,0.25);}
+
+/* SLIDERS */
+.slider-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;margin-bottom:1.25rem;box-shadow:var(--sh);}
+.sf label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--label);display:block;margin-bottom:10px;}
+.sr{display:flex;align-items:center;gap:10px;}
+.sr input[type=range]{flex:1;-webkit-appearance:none;height:3px;background:var(--border);border-radius:2px;outline:none;cursor:pointer;}
+.sr input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--purple);cursor:pointer;box-shadow:0 0 0 3px rgba(104,79,163,0.15);}
+.sv{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--purple);min-width:86px;text-align:right;}
+
+/* SAVINGS BANNER */
+.sav-banner{background:var(--ink);border-radius:var(--r);padding:1.75rem 2rem;margin-bottom:1.25rem;display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;align-items:center;}
+.sb-div{background:rgba(255,255,255,0.07);height:44px;}
+.sb-cell{padding:0 1.75rem;}
+.sb-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.25);margin-bottom:6px;}
+.sb-val{font-family:var(--mono);font-size:18px;font-weight:500;color:rgba(255,255,255,0.55);}
+.sb-val.big{font-size:28px;font-weight:500;color:var(--orange);}
+.sb-val.pos{color:#4de8b0;}
+.sb-sub{font-size:11px;color:rgba(255,255,255,0.25);margin-top:3px;font-family:var(--mono);}
+
+/* CARDS */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem 1.5rem;box-shadow:var(--sh);}
+.card.cocoa{border-left:3px solid var(--purple);box-shadow:var(--sh),0 0 0 4px rgba(104,79,163,0.04);}
+.card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.card-head h3{font-size:12.5px;font-weight:700;}
+.badge{font-size:9px;font-weight:600;padding:3px 9px;border-radius:100px;text-transform:uppercase;letter-spacing:0.05em;}
+.badge-gray{background:var(--bg);color:var(--label);border:1px solid var(--border);}
+.badge-purple{background:var(--purple-lo);color:var(--purple);border:1px solid var(--purple-md);}
+.badge-ent{background:var(--purple-lo);color:var(--purple);border:1px solid var(--purple-md);margin-left:5px;font-size:8.5px;}
+.subsec{font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);padding:8px 0 2px;}
+.line{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;font-size:12px;border-bottom:1px solid rgba(226,220,237,0.45);}
+.line:last-of-type{border-bottom:none;}
+.ll{color:var(--label);}
+.lv{font-weight:600;font-family:var(--mono);font-size:11.5px;}
+.lv.neg{color:var(--red);}
+.lv.pos{color:var(--green);}
+.lv.neu{color:var(--ink);}
+.lv.dim{color:var(--label);}
+.card-total{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:12px;border-top:1.5px solid var(--border-str);}
+.ct-lbl{font-size:11.5px;font-weight:600;}
+.ct-val{font-family:var(--mono);font-size:21px;font-weight:600;}
+.ct-val.ink{color:var(--ink);}
+.ct-val.purple{color:var(--purple);}
+.emp-box{background:var(--bg);border-radius:var(--r-sm);padding:10px 12px;margin-top:10px;border:1px solid var(--border);}
+.emp-row{display:flex;justify-content:space-between;font-size:11.5px;color:var(--label);padding:3px 0;}
+.emp-row strong{color:var(--ink);font-weight:600;}
+.er-v{font-family:var(--mono);font-weight:500;}
+.cf-box{background:var(--teal-lo);border:1px solid rgba(11,157,152,0.16);border-radius:var(--r-sm);padding:10px 14px;margin-top:10px;}
+.cf-row{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;padding:3px 0;}
+.cf-row.total{border-top:1px dashed rgba(11,157,152,0.2);margin-top:5px;padding-top:6px;}
+.cf-val{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--teal);}
+
+/* BAR CHART */
+.bar-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;box-shadow:var(--sh);margin-bottom:1.25rem;}
+.bar-row{display:flex;align-items:center;gap:12px;margin-bottom:9px;}
+.bar-name{font-size:10px;font-weight:600;color:var(--label);min-width:188px;text-transform:uppercase;letter-spacing:0.04em;}
+.bar-track{flex:1;background:var(--bg);border-radius:4px;height:29px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding:0 11px;transition:width .4s cubic-bezier(.4,0,.2,1);}
+.bar-fill span{font-family:var(--mono);font-size:11px;font-weight:500;color:rgba(255,255,255,0.9);white-space:nowrap;}
+.bf1{background:rgba(104,79,163,0.38);}
+.bf2{background:rgba(104,79,163,0.72);}
+.bf3{background:var(--teal);}
+.bf4{background:var(--green);}
+
+/* BENEFIT GRID */
+.benefit-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;}
+.bc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem 1.5rem;box-shadow:var(--sh);}
+.bc-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:var(--muted);margin-bottom:6px;}
+.bc-val{font-family:var(--mono);font-size:22px;font-weight:600;margin-bottom:3px;}
+.bc-val.red{color:var(--red);}
+.bc-val.green{color:var(--green);}
+.bc-val.purple{color:var(--purple);}
+.bc-val.teal{color:var(--teal);}
+.bc-sub{font-size:10px;color:var(--muted);line-height:1.5;}
+
+/* WORKER CALC */
+.ww{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--teal);border-radius:var(--r);padding:1.75rem;margin-bottom:1.25rem;box-shadow:var(--sh);}
+.ww-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border);}
+.ww-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.ww-sub{font-size:12px;color:var(--label);line-height:1.6;}
+.ww-badge{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;background:var(--teal);color:#fff;padding:4px 11px;border-radius:100px;white-space:nowrap;}
+.slrow{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;}
+.slrow-lbl{font-size:9.5px;font-weight:700;color:var(--label);text-transform:uppercase;letter-spacing:0.07em;min-width:210px;}
+.slrow input[type=range]{flex:1;-webkit-appearance:none;height:3px;border-radius:2px;outline:none;cursor:pointer;background:var(--border);}
+.slrow input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--teal);cursor:pointer;box-shadow:0 0 0 3px rgba(11,157,152,0.15);}
+.slrow-val{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--teal);min-width:46px;text-align:right;}
+.split-bar{display:flex;height:30px;border-radius:6px;overflow:hidden;gap:2px;margin-bottom:1.1rem;}
+.sp-c{background:var(--purple);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;transition:flex .35s cubic-bezier(.4,0,.2,1);}
+.sp-co{background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;transition:flex .35s cubic-bezier(.4,0,.2,1);}
+.split-legend{display:flex;gap:1.25rem;margin-bottom:1.25rem;}
+.sl-i{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--label);}
+.sl-dot{width:9px;height:9px;border-radius:2px;}
+.wcr-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.25rem;}
+.wcr{border-radius:var(--r-sm);padding:14px 16px;}
+.wcr.trad{background:var(--red-lo);border:1px solid rgba(200,60,60,0.12);}
+.wcr.poder{background:var(--purple-lo);border:1px solid var(--purple-md);}
+.wcr.delta{background:var(--green-lo);border:1px solid rgba(26,158,117,0.15);}
+.wcr-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;}
+.wcr-lbl.red{color:var(--red);}
+.wcr-lbl.purple{color:var(--purple);}
+.wcr-lbl.green{color:var(--green);}
+.wcr-val{font-family:var(--mono);font-size:21px;font-weight:700;}
+.wcr-val.red{color:var(--red);}
+.wcr-val.purple{color:var(--purple);}
+.wcr-val.green{color:var(--green);}
+.wcr-sub{font-size:10px;color:var(--muted);margin-top:4px;line-height:1.5;}
+.bb-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px 16px;}
+.bb-title{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:var(--muted);margin-bottom:10px;}
+.bb-row{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;padding:5px 0;border-bottom:1px solid var(--border);}
+.bb-row:last-child{border-bottom:none;border-top:1.5px solid var(--border-str);padding-top:8px;margin-top:4px;}
+.bb-v{font-family:var(--mono);font-size:11.5px;font-weight:600;}
+
+/* TABLE */
+.tbl-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);margin-bottom:1.25rem;}
+.sum-table{width:100%;border-collapse:collapse;font-size:12px;}
+.sum-table th{text-align:left;padding:10px 14px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);background:var(--bg);border-bottom:1px solid var(--border);}
+.sum-table td{padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.sum-table tr:last-child td{border-bottom:none;}
+.sum-table tr.hi td{background:rgba(104,79,163,0.035);}
+.sum-table tr.hi td:first-child{border-left:3px solid var(--purple);}
+.sc-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;}
+.sc-dot.a{background:var(--muted);}
+.sc-dot.b{background:var(--purple);}
+.sc-dot.c{background:#c47d1a;}
+.num{font-family:var(--mono);}
+.num.pos{color:var(--green);font-weight:600;}
+.num.teal{color:var(--teal);font-weight:600;}
+.num.strike{color:var(--muted);text-decoration:line-through;}
+
+/* NOTE */
+.note{font-size:11px;color:var(--muted);line-height:1.8;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px 18px;margin-bottom:1.5rem;}
+.note strong{color:var(--label);}
+
+/* CTA */
+.cta{background:var(--ink);border-radius:var(--r);padding:2rem 2.5rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;}
+.cta h3{font-size:16px;font-weight:700;color:#fff;margin-bottom:5px;}
+.cta p{font-size:12px;color:rgba(255,255,255,0.4);}
+.cta-btn{background:var(--orange);color:var(--ink);font-family:var(--sans);font-size:11.5px;font-weight:700;padding:13px 26px;border-radius:100px;border:none;cursor:pointer;text-transform:uppercase;letter-spacing:0.06em;white-space:nowrap;}
+.cta-btn:hover{opacity:0.88;}
+
+/* FOOTER */
+.footer{background:var(--ink);text-align:center;padding:1.25rem;font-size:10.5px;color:rgba(255,255,255,0.2);}
+.footer span{color:rgba(139,114,196,0.6);}
+
+@media(max-width:800px){
+  .kpi-row{flex-wrap:wrap;}
+  .kpi{flex:1 1 40%;}
+  .two-col,.benefit-grid,.wcr-row{grid-template-columns:1fr;}
+  .sav-banner{grid-template-columns:1fr;gap:1rem;padding:1.5rem;}
+  .sb-div{display:none;}
+  .slider-grid{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:520px){
+  .slider-grid{grid-template-columns:1fr;}
+  .main{padding:1.5rem 1rem 3rem;}
+  .hero-h1{font-size:22px;}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-inner">
+    <div class="logo-group">
+      <!-- Real Cocoa logo: C=half-disc, O=circle, C=half-disc, O=circle, A=right-triangle -->
+      <svg class="logo-svg" viewBox="0 0 158 40" fill="white" xmlns="http://www.w3.org/2000/svg" aria-label="Cocoa">
+        <!-- C: left half-disc, flat edge right -->
+        <path d="M13,4 A13,13 0 0,0 13,36 L13,4 Z"/>
+        <!-- O -->
+        <circle cx="44" cy="20" r="13"/>
+        <!-- C: left half-disc -->
+        <path d="M75,4 A13,13 0 0,0 75,36 L75,4 Z"/>
+        <!-- O -->
+        <circle cx="106" cy="20" r="13"/>
+        <!-- A: right triangle (bottom-left, bottom-right, top-right) -->
+        <path d="M122,36 L150,36 L150,4 Z"/>
+        <!-- ® -->
+        <circle cx="155" cy="8" r="4.5" fill="none" stroke="white" stroke-width="1"/>
+        <text x="155" y="11" text-anchor="middle" font-size="5.5" fill="white" font-family="sans-serif" font-weight="700">R</text>
+      </svg>
+      <div class="logo-sep"></div>
+      <span class="logo-badge">Business</span>
+    </div>
+    <div class="hdr-right">
+      <div class="hdr-label">Propuesta para</div>
+      <div class="hdr-name">NexoCorp Holding Bolivia</div>
+      <div class="hdr-sub">Mayo 2026 · Confidencial</div>
+    </div>
+  </div>
+</header>
+
+<div class="hstrip">
+  <div class="hstrip-inner">
+    <span class="hpill on">Farmacorp</span>
+    <span class="hpill on">Amarket</span>
+    <span class="hpill on">Farmaclub</span>
+    <span class="hpill">+ Nuevas unidades elegibles</span>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Variable Salary · Calculadora de ahorro para holding</div>
+    <h1 class="hero-h1">NexoCorp puede ahorrar hasta <em id="hero_usd">USD 118,000</em> al año<br>pagando comisiones a través de Cocoa.</h1>
+    <p class="hero-sub">La carga patronal real en Bolivia es del <strong>34.38%</strong> sobre cada boliviano variable. Con Cocoa Business el costo neto baja a <strong>−3%</strong> al incorporar el crédito fiscal IVA del 13%.</p>
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val accent" id="hk_ahorro">Bs 820K</div><div class="kpi-lbl">Ahorro anual estimado</div></div>
+      <div class="kpi"><div class="kpi-val pos" id="hk_pct">24.2%</div><div class="kpi-lbl">Reducción del costo variable</div></div>
+      <div class="kpi"><div class="kpi-val" id="hk_emp">+Bs 770</div><div class="kpi-lbl">Más en mano por colaborador</div></div>
+      <div class="kpi"><div class="kpi-val" id="hk_cf">Bs 0</div><div class="kpi-lbl">Crédito fiscal recuperado</div></div>
+      <div class="kpi"><div class="kpi-val" id="hk_overhead">34.38% → −3%</div><div class="kpi-lbl">Overhead real → neto Cocoa + CF</div></div>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+
+  <div class="bu-bar">
+    <span class="bu-lbl">Unidad</span>
+    <div class="bu-btns">
+      <button class="bu-btn active" onclick="setBU('farmacorp',this)">Farmacorp</button>
+      <button class="bu-btn" onclick="setBU('amarket',this)">Amarket</button>
+      <button class="bu-btn" onclick="setBU('farmaclub',this)">Farmaclub</button>
+      <button class="bu-btn" onclick="setBU('holding',this)">Holding completo</button>
+    </div>
+  </div>
+
+  <div class="sec-lbl">Escenario NexoCorp</div>
+  <div class="sc-row">
+    <button class="sc-btn" onclick="loadScenario('A',this)">Piloto — 50 emp / Bs 4,500</button>
+    <button class="sc-btn active" onclick="loadScenario('B',this)">Expansión — 120 emp / Bs 6,000</button>
+    <button class="sc-btn" onclick="loadScenario('C',this)">Holding completo — 250 emp / Bs 8,000</button>
+    <button class="sc-btn" onclick="loadScenario('custom',this)">Personalizar</button>
+  </div>
+
+  <div class="slider-grid">
+    <div class="sf"><label>Monto variable / colaborador (Bs)</label>
+      <div class="sr"><input type="range" id="c_monto" min="200" max="25000" value="6000" step="100" oninput="calc()"><span class="sv" id="o_monto">Bs 6,000</span></div>
+    </div>
+    <div class="sf"><label>Colaboradores con variable</label>
+      <div class="sr"><input type="range" id="c_emp" min="1" max="3500" value="120" step="5" oninput="calc()"><span class="sv" id="o_emp">120 emp.</span></div>
+    </div>
+    <div class="sf"><label>Pagos variables al año</label>
+      <div class="sr"><input type="range" id="c_pag" min="1" max="24" value="12" step="1" oninput="calc()"><span class="sv" id="o_pag">12 pagos</span></div>
+    </div>
+  </div>
+
+  <div class="sav-banner">
+    <div class="sb-cell"><div class="sb-lbl">Costo anual en planilla tradicional</div><div class="sb-val" id="ban_trad">Bs 0</div></div>
+    <div class="sb-div"></div>
+    <div class="sb-cell" style="text-align:center"><div class="sb-lbl">Ahorro anual neto (con CF)</div><div class="sb-val big" id="ban_sav">Bs 0</div><div class="sb-sub" id="ban_savusd">USD 0</div></div>
+    <div class="sb-div"></div>
+    <div class="sb-cell" style="text-align:right"><div class="sb-lbl">Costo anual neto con Cocoa</div><div class="sb-val pos" id="ban_cocoa">Bs 0</div></div>
+  </div>
+
+  <div class="sec-lbl">Comparativa por colaborador — un solo pago</div>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-head"><h3>Planilla tradicional</h3><span class="badge badge-gray">Situación actual</span></div>
+      <div class="subsec">Aportes patronales</div>
+      <div class="line"><span class="ll">AFP Patronal (3%)</span><span class="lv neg" id="r_afpP">—</span></div>
+      <div class="line"><span class="ll">Riesgo Profesional (1.71%)</span><span class="lv neg" id="r_riesP">—</span></div>
+      <div class="line"><span class="ll">CNS — Caja Nacional (10%)</span><span class="lv neg" id="r_cnsP">—</span></div>
+      <div class="line"><span class="ll">FONVIS Pro-vivienda (2%)</span><span class="lv neg" id="r_fonP">—</span></div>
+      <div class="line"><span class="ll">Solidaridad patronal (3.5% — Ley 1582)</span><span class="lv neg" id="r_solP">—</span></div>
+      <div class="subsec">Provisiones sobre variable</div>
+      <div class="line"><span class="ll">Aguinaldo (8.33%)</span><span class="lv neg" id="r_aguP">—</span></div>
+      <div class="line"><span class="ll">Vacaciones (4.17%)</span><span class="lv neg" id="r_vacP">—</span></div>
+      <div class="line"><span class="ll">Quinquenio (1.67%)</span><span class="lv neg" id="r_quiP">—</span></div>
+      <div class="card-total"><span class="ct-lbl">Costo real empleador</span><span class="ct-val ink" id="r_totalTrad">—</span></div>
+      <div class="emp-box">
+        <div class="emp-row"><span>Bruto colaborador</span><span class="er-v" id="e_bruto">—</span></div>
+        <div class="emp-row"><span>AFP laboral (−10%)</span><span class="er-v" style="color:var(--red)" id="e_afpL">—</span></div>
+        <div class="emp-row"><span>Prima RC (−1.71%)</span><span class="er-v" style="color:var(--red)" id="e_rcL">—</span></div>
+        <div class="emp-row"><span>CNS laboral (−1%)</span><span class="er-v" style="color:var(--red)" id="e_cnsL">—</span></div>
+        <div class="emp-row" style="border-top:1px solid var(--border);margin-top:5px;padding-top:5px"><span><strong>Neto colaborador</strong></span><span class="er-v"><strong id="e_neto">—</strong></span></div>
+      </div>
+    </div>
+    <div class="card cocoa">
+      <div class="card-head">
+        <h3>Cocoa Business — Variable Salary<span class="badge badge-ent">Enterprise</span></h3>
+        <span class="badge badge-purple">Propuesta</span>
+      </div>
+      <div class="subsec">Fondeo de puntos</div>
+      <div class="line"><span class="ll">Monto a distribuir</span><span class="lv neu" id="r_cMonto">—</span></div>
+      <div class="line"><span class="ll">Service fee Cocoa (10%)</span><span class="lv neg" id="r_cFee">—</span></div>
+      <div class="line"><span class="ll">Plan Enterprise (Bs 9 / colaborador)</span><span class="lv neg" id="r_saas">—</span></div>
+      <div class="line"><span class="ll">AFP · CNS · Provisiones</span><span class="lv pos">Bs 0</span></div>
+      <div class="subsec">Lo que recibe el colaborador</div>
+      <div class="line"><span class="ll">Puntos asignados (1 : 1)</span><span class="lv pos" id="r_puntos">—</span></div>
+      <div class="line"><span class="ll">Usar en Farmacorp · Amarket · red Cocoa</span><span class="lv pos">100% + cashback</span></div>
+      <div class="line"><span class="ll">Cash-out a cuenta (−6%)</span><span class="lv dim" id="r_cashOut">—</span></div>
+      <div class="card-total"><span class="ct-lbl">Costo bruto empleador</span><span class="ct-val purple" id="r_totalCocoa">—</span></div>
+      <div class="cf-box">
+        <div class="cf-row"><span style="color:var(--label);font-size:12px">Crédito fiscal recuperado NexoCorp (13%)</span><span class="cf-val" id="r_cfRecovery">—</span></div>
+        <div class="cf-row total"><strong style="font-size:12px">Costo neto efectivo NexoCorp</strong><span class="cf-val" id="r_netoCocoa">—</span></div>
+      </div>
+      <div class="emp-box" style="background:var(--green-lo);border-color:rgba(26,158,117,0.15)">
+        <div class="emp-row"><span>Puntos recibidos</span><span class="er-v" style="color:var(--green)" id="e_puntos">—</span></div>
+        <div class="emp-row"><span>Si gasta en Farmacorp / Amarket</span><span class="er-v" style="color:var(--green)" id="e_gasta">—</span></div>
+        <div class="emp-row"><span>Si hace cash-out (neto −6%)</span><span class="er-v" id="e_cashNeto">—</span></div>
+        <div class="emp-row" style="border-top:1px solid rgba(26,158,117,0.2);margin-top:5px;padding-top:5px"><span><strong>Diferencia vs planilla neto</strong></span><span class="er-v"><strong style="color:var(--green)" id="e_diff">—</strong></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bar-wrap">
+    <div class="sec-lbl" style="margin-bottom:14px">Costo total mensual — holding NexoCorp</div>
+    <div class="bar-row"><span class="bar-name">Planilla tradicional</span><div class="bar-track"><div class="bar-fill bf1" id="bar_trad" style="width:100%"><span id="bv_trad">—</span></div></div></div>
+    <div class="bar-row"><span class="bar-name">Cocoa Business (bruto)</span><div class="bar-track"><div class="bar-fill bf2" id="bar_cocoa"><span id="bv_cocoa">—</span></div></div></div>
+    <div class="bar-row"><span class="bar-name">Cocoa + CF recuperado</span><div class="bar-track"><div class="bar-fill bf3" id="bar_neto"><span id="bv_neto">—</span></div></div></div>
+    <div class="bar-row"><span class="bar-name">Ahorro mensual neto</span><div class="bar-track"><div class="bar-fill bf4" id="bar_sav"><span id="bv_sav">—</span></div></div></div>
+  </div>
+
+  <div class="sec-lbl">¿Qué gana el equipo de NexoCorp?</div>
+  <div class="benefit-grid">
+    <div class="bc"><div class="bc-lbl">Neto en planilla hoy</div><div class="bc-val red" id="eb_neto">—</div><div class="bc-sub">Tras AFP + RC + CNS laboral (12.71%)</div></div>
+    <div class="bc"><div class="bc-lbl">Puntos Cocoa recibidos</div><div class="bc-val green" id="eb_cocoa">—</div><div class="bc-sub">100% del nominal · Cashback en Farmacorp y Amarket</div></div>
+    <div class="bc"><div class="bc-lbl">Diferencia a favor</div><div class="bc-val purple" id="eb_gain">—</div><div class="bc-sub">Más poder de compra por colaborador</div></div>
+    <div class="bc"><div class="bc-lbl">Cash-out disponible</div><div class="bc-val teal" id="eb_cash">—</div><div class="bc-sub">Si retira a cuenta bancaria (−6% comisión)</div></div>
+  </div>
+
+  <div class="sec-lbl">Poder adquisitivo neto por colaborador</div>
+  <div class="ww">
+    <div class="ww-head">
+      <div><div class="ww-title">Simulador de uso: Cocoa vs Cash-out</div><div class="ww-sub">El colaborador decide cómo usa sus puntos. Ajusta el split y ve el poder adquisitivo real vs. planilla.</div></div>
+      <span class="ww-badge">Interactivo</span>
+    </div>
+    <div class="slrow">
+      <span class="slrow-lbl">% Gasta en red Cocoa / NexoCorp</span>
+      <input type="range" id="w_pctCocoa" min="0" max="100" value="20" step="5" oninput="calcWorker()">
+      <span class="slrow-val" id="wo_cocoa">20%</span>
+    </div>
+    <div class="split-bar">
+      <div class="sp-c" id="sv_cocoa" style="flex:20"><span id="sv_cocoa_label">20% Cocoa</span></div>
+      <div class="sp-co" id="sv_cash" style="flex:80"><span id="sv_cash_label">80% Cash-out</span></div>
+    </div>
+    <div class="split-legend">
+      <div class="sl-i"><div class="sl-dot" style="background:var(--purple)"></div><span>Gasta en Farmacorp · Amarket · red Cocoa (+1% cashback)</span></div>
+      <div class="sl-i"><div class="sl-dot" style="background:var(--teal)"></div><span>Cash-out a cuenta bancaria (−6%)</span></div>
+    </div>
+    <div class="wcr-row">
+      <div class="wcr trad"><div class="wcr-lbl red">Planilla neto hoy</div><div class="wcr-val red" id="wcr_trad">—</div><div class="wcr-sub">AFP 10% + RC 1.71% + CNS 1%</div></div>
+      <div class="wcr poder"><div class="wcr-lbl purple">Poder adquisitivo Cocoa</div><div class="wcr-val purple" id="wcr_poder">—</div><div class="wcr-sub" id="wcr_poder_sub">20% en red + 80% cash-out</div></div>
+      <div class="wcr delta" id="wcr_delta_card"><div class="wcr-lbl green" id="wcr_delta_lbl">Ganancia neta</div><div class="wcr-val green" id="wcr_delta">—</div><div class="wcr-sub" id="wcr_delta_pct">+0.0% más en la mano</div></div>
+    </div>
+    <div class="bb-box">
+      <div class="bb-title">Desglose del poder adquisitivo con Cocoa</div>
+      <div class="bb-row"><span style="color:var(--label)">Puntos recibidos (nominal)</span><span class="bb-v" id="wb_nominal">—</span></div>
+      <div class="bb-row"><span style="color:var(--label)">Gasto red Cocoa (<span id="wb_pctC">20%</span> × nominal + 1%)</span><span class="bb-v" style="color:var(--purple)" id="wb_cocoaPart">—</span></div>
+      <div class="bb-row"><span style="color:var(--label)">Cash-out (<span id="wb_pctCO">80%</span> × nominal − 6%)</span><span class="bb-v" style="color:var(--teal)" id="wb_cashPart">—</span></div>
+      <div class="bb-row"><span><strong>Total poder adquisitivo neto</strong></span><span class="bb-v" style="color:var(--green)" id="wb_total">—</span></div>
+    </div>
+  </div>
+
+  <div class="sec-lbl">Los 3 escenarios · Resumen comparativo</div>
+  <div class="tbl-wrap">
+    <table class="sum-table">
+      <thead><tr><th>Escenario</th><th>Alcance</th><th>Emp.</th><th>Variable/emp</th><th>Planilla / año</th><th>Cocoa bruto / año</th><th>CF recuperado</th><th>Costo neto Cocoa</th><th>Ahorro anual</th><th>Ahorro USD</th></tr></thead>
+      <tbody>
+        <tr id="row_a">
+          <td><span class="sc-dot a"></span>Piloto</td>
+          <td style="color:var(--label);font-size:11px">Farmacorp (1 BU)</td>
+          <td>50</td><td>Bs 4,500</td>
+          <td class="num strike" id="t_tradA">—</td><td class="num" id="t_brutA">—</td>
+          <td class="num teal" id="t_cfA">—</td><td class="num" id="t_netA">—</td>
+          <td class="num pos" id="t_savA">—</td><td class="num pos" id="t_savUsdA">—</td>
+        </tr>
+        <tr id="row_b" class="hi">
+          <td><span class="sc-dot b"></span><strong>Expansión ★</strong></td>
+          <td style="color:var(--label);font-size:11px">Farmacorp + Amarket</td>
+          <td>120</td><td>Bs 6,000</td>
+          <td class="num strike" id="t_tradB">—</td><td class="num" id="t_brutB">—</td>
+          <td class="num teal" id="t_cfB">—</td><td class="num" id="t_netB">—</td>
+          <td class="num pos" id="t_savB">—</td><td class="num pos" id="t_savUsdB">—</td>
+        </tr>
+        <tr id="row_c">
+          <td><span class="sc-dot c"></span>Holding completo</td>
+          <td style="color:var(--label);font-size:11px">Todas las unidades</td>
+          <td>250</td><td>Bs 8,000</td>
+          <td class="num strike" id="t_tradC">—</td><td class="num" id="t_brutC">—</td>
+          <td class="num teal" id="t_cfC">—</td><td class="num" id="t_netC">—</td>
+          <td class="num pos" id="t_savC">—</td><td class="num pos" id="t_savUsdC">—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <strong>Metodología Bolivia 2026.</strong> Aportes patronales: AFP 3% + Riesgo Profesional 1.71% + CNS 10% + FONVIS 2% + Solidaridad 3.5% = 20.21%. Provisiones: Aguinaldo 8.33% + Vacaciones 4.17% + Quinquenio 1.67% = 14.17%. Total overhead planilla: <strong>34.38%</strong> (Ley 1582 vigente desde oct-2024). Deducciones laborales: AFP 10% + RC 1.71% + CNS 1% = 12.71%. <strong>Cocoa Business Enterprise:</strong> 10% service fee sobre monto fondeado + Bs 9/colaborador/mes. <strong>Crédito fiscal 13%:</strong> NexoCorp recupera el 13% del monto total facturado (monto + fee) como crédito fiscal IVA. <strong>Cash-out:</strong> 6% al colaborador al retirar a cuenta bancaria. <strong>Cashback:</strong> 1% al gastar en la red Cocoa (incluye Farmacorp y Amarket). <strong>TC referencial BCB:</strong> Bs 6.96 / USD. Esta calculadora es referencial — consulte a su asesor legal-contable para el caso específico del holding.
+  </div>
+
+  <div class="cta">
+    <div><h3>¿Listos para activar Variable Salary en NexoCorp?</h3><p>En 20 minutos validamos los números exactos con la estructura de comisiones real de Farmacorp y Amarket.</p></div>
+    <button class="cta-btn">Coordinar reunión técnica</button>
+  </div>
+
+</main>
+
+<footer class="footer">
+  Cocoa Business · Variable Salary · Propuesta para <span>NexoCorp Holding Bolivia</span> · Mayo 2026 · luciano@cocoalatam.com
+</footer>
+
+<script>
+const TC=6.96;
+const AFP_PAT=0.03,RIESGO=0.0171,CNS_PAT=0.10,FONVIS=0.02,SOLID=0.035;
+const AGU=0.0833,VAC=0.0417,QUINQ=0.0167;
+const AFP_LAB=0.10,RC_LAB=0.0171,CNS_LAB=0.01;
+const FEE=0.10,CASHOUT=0.06,CF=0.13,CASHBACK=0.01,SAAS_PER_EMP=9;
+const TOTAL_PATRON=AFP_PAT+RIESGO+CNS_PAT+FONVIS+SOLID+AGU+VAC+QUINQ;
+const fBs=n=>'Bs '+Math.round(n).toLocaleString('es-BO');
+const fNeg=n=>'−Bs '+Math.round(n).toLocaleString('es-BO');
+const fU=n=>'USD '+Math.round(n).toLocaleString('en-US');
+const fPct=n=>(n*100).toFixed(1)+'%';
+const SCENARIOS={A:{monto:4500,emp:50,pag:12},B:{monto:6000,emp:120,pag:12},C:{monto:8000,emp:250,pag:12}};
+
+function setBU(bu,btn){document.querySelectorAll('.bu-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+
+function loadScenario(key,btn){
+  document.querySelectorAll('.sc-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  if(key==='custom'){calc();return;}
+  const s=SCENARIOS[key];
+  document.getElementById('c_monto').value=s.monto;
+  document.getElementById('c_emp').value=s.emp;
+  document.getElementById('c_pag').value=s.pag;
+  ['row_a','row_b','row_c'].forEach(id=>document.getElementById(id).classList.remove('hi'));
+  const rm={A:'row_a',B:'row_b',C:'row_c'};
+  if(rm[key])document.getElementById(rm[key]).classList.add('hi');
+  calc();
+}
+
+function calc(){
+  const M=parseFloat(document.getElementById('c_monto').value);
+  const E=parseInt(document.getElementById('c_emp').value);
+  const P=parseInt(document.getElementById('c_pag').value);
+  document.getElementById('o_monto').textContent=fBs(M);
+  document.getElementById('o_emp').textContent=E+' emp.';
+  document.getElementById('o_pag').textContent=P+(P===1?' pago':' pagos');
+
+  const afpP=M*AFP_PAT,riesP=M*RIESGO,cnsP=M*CNS_PAT,fonP=M*FONVIS,solP=M*SOLID;
+  const aguP=M*AGU,vacP=M*VAC,quiP=M*QUINQ;
+  const tradEmp=M*(1+TOTAL_PATRON);
+  const feeAmt=M*FEE,saasPer=SAAS_PER_EMP;
+  const brutoCocoa=M+feeAmt+saasPer;
+  const cfRecov=(M+feeAmt)*CF;
+  const netoCocoa=brutoCocoa-cfRecov;
+  const savEmp=tradEmp-netoCocoa,savPct=savEmp/tradEmp;
+  const afpL=M*AFP_LAB,rcL=M*RC_LAB,cnsL=M*CNS_LAB;
+  const neto=M-afpL-rcL-cnsL,cashNeto=M*(1-CASHOUT),diffEmp=M-neto;
+  const tradMonth=tradEmp*E;
+  const brutoCocoaMonth=(M*(1+FEE)+SAAS_PER_EMP)*E;
+  const cfMonth=(M*(1+FEE))*E*CF;
+  const netoCocoaMonth=brutoCocoaMonth-cfMonth;
+  const savMonth=tradMonth-netoCocoaMonth;
+  const tradAnnual=tradMonth*P,brutoAnnual=brutoCocoaMonth*P;
+  const cfAnnual=cfMonth*P,netoAnnual=netoCocoaMonth*P;
+  const savAnnual=tradAnnual-netoAnnual,savUSD=savAnnual/TC;
+
+  document.getElementById('hero_usd').textContent='USD '+Math.round(savAnnual/TC).toLocaleString('en-US');
+  document.getElementById('hk_ahorro').textContent='Bs '+(savAnnual>=1000000?(savAnnual/1000000).toFixed(1)+'M':Math.round(savAnnual/1000)+'K');
+  document.getElementById('hk_pct').textContent=fPct(savPct);
+  document.getElementById('hk_emp').textContent='+'+fBs(diffEmp);
+  document.getElementById('hk_cf').textContent='Bs '+(cfAnnual>=1000000?(cfAnnual/1000000).toFixed(1)+'M':Math.round(cfAnnual/1000)+'K');
+  document.getElementById('ban_trad').textContent=fBs(tradAnnual);
+  document.getElementById('ban_sav').textContent=fBs(savAnnual);
+  document.getElementById('ban_savusd').textContent='≈ '+fU(savUSD);
+  document.getElementById('ban_cocoa').textContent=fBs(netoAnnual);
+  document.getElementById('r_afpP').textContent=fNeg(afpP);
+  document.getElementById('r_riesP').textContent=fNeg(riesP);
+  document.getElementById('r_cnsP').textContent=fNeg(cnsP);
+  document.getElementById('r_fonP').textContent=fNeg(fonP);
+  document.getElementById('r_solP').textContent=fNeg(solP);
+  document.getElementById('r_aguP').textContent=fNeg(aguP);
+  document.getElementById('r_vacP').textContent=fNeg(vacP);
+  document.getElementById('r_quiP').textContent=fNeg(quiP);
+  document.getElementById('r_totalTrad').textContent=fBs(tradEmp);
+  document.getElementById('e_bruto').textContent=fBs(M);
+  document.getElementById('e_afpL').textContent=fNeg(afpL);
+  document.getElementById('e_rcL').textContent=fNeg(rcL);
+  document.getElementById('e_cnsL').textContent=fNeg(cnsL);
+  document.getElementById('e_neto').textContent=fBs(neto);
+  document.getElementById('r_cMonto').textContent=fBs(M);
+  document.getElementById('r_cFee').textContent=fNeg(feeAmt);
+  document.getElementById('r_saas').textContent=fNeg(saasPer);
+  document.getElementById('r_puntos').textContent=Math.round(M).toLocaleString('es-BO')+' pts';
+  document.getElementById('r_cashOut').textContent=fBs(cashNeto)+' neto';
+  document.getElementById('r_totalCocoa').textContent=fBs(brutoCocoa);
+  document.getElementById('r_cfRecovery').textContent='+'+fBs(cfRecov);
+  document.getElementById('r_netoCocoa').textContent=fBs(netoCocoa);
+  document.getElementById('e_puntos').textContent=Math.round(M).toLocaleString('es-BO')+' pts';
+  document.getElementById('e_gasta').textContent=fBs(M)+' + cashback';
+  document.getElementById('e_cashNeto').textContent=fBs(cashNeto);
+  document.getElementById('e_diff').textContent='+'+fBs(diffEmp)+' más en mano';
+  document.getElementById('bar_trad').style.width='100%';
+  document.getElementById('bv_trad').textContent=fBs(tradMonth)+'/mes';
+  document.getElementById('bar_cocoa').style.width=(brutoCocoaMonth/tradMonth*100).toFixed(1)+'%';
+  document.getElementById('bv_cocoa').textContent=fBs(brutoCocoaMonth)+'/mes';
+  document.getElementById('bar_neto').style.width=(netoCocoaMonth/tradMonth*100).toFixed(1)+'%';
+  document.getElementById('bv_neto').textContent=fBs(netoCocoaMonth)+'/mes';
+  document.getElementById('bar_sav').style.width=Math.max(0,(savMonth/tradMonth*100)).toFixed(1)+'%';
+  document.getElementById('bv_sav').textContent=fBs(savMonth)+'/mes';
+  document.getElementById('eb_neto').textContent=fBs(neto);
+  document.getElementById('eb_cocoa').textContent=Math.round(M).toLocaleString('es-BO')+' pts';
+  document.getElementById('eb_gain').textContent='+'+fBs(diffEmp);
+  document.getElementById('eb_cash').textContent=fBs(cashNeto);
+  updateTable();calcWorker();
+}
+
+function calcWorker(){
+  const M=parseFloat(document.getElementById('c_monto').value);
+  const pctC=parseFloat(document.getElementById('w_pctCocoa').value)/100;
+  const pctCO=1-pctC;
+  document.getElementById('wo_cocoa').textContent=Math.round(pctC*100)+'%';
+  document.getElementById('wb_pctC').textContent=Math.round(pctC*100)+'%';
+  document.getElementById('wb_pctCO').textContent=Math.round(pctCO*100)+'%';
+  document.getElementById('sv_cocoa_label').textContent=Math.round(pctC*100)+'% Cocoa';
+  document.getElementById('sv_cash_label').textContent=Math.round(pctCO*100)+'% Cash-out';
+  document.getElementById('wcr_poder_sub').textContent=Math.round(pctC*100)+'% en red + '+Math.round(pctCO*100)+'% cash-out';
+  document.getElementById('sv_cocoa').style.flex=Math.max(pctC*100,5);
+  document.getElementById('sv_cash').style.flex=Math.max(pctCO*100,5);
+  const cocoaValue=M*pctC*(1+CASHBACK),cashValue=M*pctCO*(1-CASHOUT);
+  const totalPoder=cocoaValue+cashValue;
+  const tradNeto=M*(1-AFP_LAB-RC_LAB-CNS_LAB);
+  const delta=totalPoder-tradNeto,deltaPct=delta/tradNeto;
+  document.getElementById('wcr_trad').textContent=fBs(tradNeto);
+  document.getElementById('wcr_poder').textContent=fBs(totalPoder);
+  document.getElementById('wcr_delta').textContent=(delta>=0?'+':'')+fBs(delta);
+  document.getElementById('wcr_delta_pct').textContent=(delta>=0?'+':'')+fPct(deltaPct)+' más en la mano';
+  document.getElementById('wb_nominal').textContent=Math.round(M).toLocaleString('es-BO')+' pts';
+  document.getElementById('wb_cocoaPart').textContent=fBs(cocoaValue);
+  document.getElementById('wb_cashPart').textContent=fBs(cashValue);
+  document.getElementById('wb_total').textContent=fBs(totalPoder);
+  const dc=document.getElementById('wcr_delta_card');
+  const dv=document.getElementById('wcr_delta');
+  const dp=document.getElementById('wcr_delta_pct');
+  const dl=document.getElementById('wcr_delta_lbl');
+  if(delta<0){dc.style.background='var(--red-lo)';dc.style.borderColor='rgba(200,60,60,0.12)';dv.style.color='var(--red)';dp.style.color='var(--red)';dl.style.color='var(--red)';}
+  else{dc.style.background='var(--green-lo)';dc.style.borderColor='rgba(26,158,117,0.15)';dv.style.color='var(--green)';dp.style.color='var(--green)';dl.style.color='var(--green)';}
+}
+
+function updateTable(){
+  [{s:'A',m:4500,e:50,p:12},{s:'B',m:6000,e:120,p:12},{s:'C',m:8000,e:250,p:12}].forEach(({s,m,e,p})=>{
+    const trad=m*(1+TOTAL_PATRON)*e*p;
+    const bruto=(m*(1+FEE)+SAAS_PER_EMP)*e*p;
+    const cf=m*(1+FEE)*e*CF*p;
+    const neto=bruto-cf,sav=trad-neto,usd=sav/TC;
+    document.getElementById('t_tradA'.replace('A',s)).textContent=fBs(trad);
+    document.getElementById('t_brutA'.replace('A',s)).textContent=fBs(bruto);
+    document.getElementById('t_cfA'.replace('A',s)).textContent=fBs(cf);
+    document.getElementById('t_netA'.replace('A',s)).textContent=fBs(neto);
+    document.getElementById('t_savA'.replace('A',s)).textContent=fBs(sav);
+    document.getElementById('t_savUsdA'.replace('A',s)).textContent='≈ USD '+Math.round(usd).toLocaleString('en-US');
+  });
+}
+
+loadScenario('B',document.querySelectorAll('.sc-btn')[1]);
+</script>
+</body>
+</html>
