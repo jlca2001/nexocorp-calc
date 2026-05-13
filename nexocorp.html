@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cocoa Business — Variable Salary</title>
+<title>Cocoa Business — Variable Salary · NexoCorp</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -47,6 +47,12 @@ body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:14p
 .hdr-name{font-size:13px;font-weight:700;color:#fff;}
 .hdr-sub{font-size:11px;color:rgba(255,255,255,0.32);}
 
+/* HOLDING STRIP */
+.hstrip{background:rgba(255,255,255,0.025);border-bottom:1px solid rgba(255,255,255,0.05);}
+.hstrip-inner{max-width:1120px;margin:0 auto;padding:7px 2rem;display:flex;gap:6px;flex-wrap:wrap;}
+.hpill{font-size:10px;font-weight:600;padding:3px 10px;border-radius:100px;letter-spacing:0.05em;text-transform:uppercase;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.35);}
+.hpill.on{background:rgba(104,79,163,0.28);border-color:rgba(139,114,196,0.4);color:#cbbfea;}
+
 /* HERO */
 .hero{background:var(--ink);padding:2.5rem 2rem 3rem;}
 .hero-inner{max-width:1120px;margin:0 auto;}
@@ -66,6 +72,13 @@ body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:14p
 .main{max-width:1120px;margin:0 auto;padding:2.5rem 1.5rem 5rem;}
 .sec-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin-bottom:12px;padding-bottom:9px;border-bottom:1px solid var(--border);}
 
+/* BU BAR */
+.bu-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 1.25rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:1rem;box-shadow:var(--sh);}
+.bu-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);white-space:nowrap;}
+.bu-btns{display:flex;gap:5px;flex-wrap:wrap;}
+.bu-btn{font-family:var(--sans);font-size:11px;font-weight:600;padding:5px 13px;border-radius:var(--r-sm);border:1px solid var(--border);background:transparent;color:var(--label);cursor:pointer;transition:all .12s;}
+.bu-btn:hover,.bu-btn.active{background:var(--purple-lo);border-color:var(--purple);color:var(--purple);}
+
 /* SCENARIOS */
 .sc-row{display:flex;gap:6px;margin-bottom:1.25rem;flex-wrap:wrap;}
 .sc-btn{font-family:var(--sans);font-size:11.5px;font-weight:600;padding:8px 18px;border-radius:100px;border:1.5px solid var(--border-str);background:transparent;color:var(--label);cursor:pointer;transition:all .12s;}
@@ -79,9 +92,6 @@ body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:14p
 .sr input[type=range]{flex:1;-webkit-appearance:none;height:3px;background:var(--border);border-radius:2px;outline:none;cursor:pointer;}
 .sr input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--purple);cursor:pointer;box-shadow:0 0 0 3px rgba(104,79,163,0.15);}
 .sv{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--purple);min-width:86px;text-align:right;}
-.num-input{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--purple);width:100%;padding:9px 12px;border:1.5px solid var(--border-str);border-radius:var(--r-sm);background:var(--surface);outline:none;transition:border-color .12s,box-shadow .12s;text-align:left;}
-.num-input:focus{border-color:var(--purple);box-shadow:0 0 0 3px var(--purple-lo);}
-.num-input::-webkit-inner-spin-button,.num-input::-webkit-outer-spin-button{opacity:1;}
 
 /* SAVINGS BANNER */
 .sav-banner{background:var(--ink);border-radius:var(--r);padding:1.75rem 2rem;margin-bottom:1.25rem;display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;align-items:center;}
@@ -240,11 +250,17 @@ body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:14p
     <div class="logo-group">
       <!-- Real Cocoa logo: C=half-disc, O=circle, C=half-disc, O=circle, A=right-triangle -->
       <svg class="logo-svg" viewBox="0 0 158 40" fill="white" xmlns="http://www.w3.org/2000/svg" aria-label="Cocoa">
+        <!-- C: left half-disc, flat edge right -->
         <path d="M13,4 A13,13 0 0,0 13,36 L13,4 Z"/>
+        <!-- O -->
         <circle cx="44" cy="20" r="13"/>
+        <!-- C: left half-disc -->
         <path d="M75,4 A13,13 0 0,0 75,36 L75,4 Z"/>
+        <!-- O -->
         <circle cx="106" cy="20" r="13"/>
+        <!-- A: right triangle (bottom-left, bottom-right, top-right) -->
         <path d="M122,36 L150,36 L150,4 Z"/>
+        <!-- ® -->
         <circle cx="155" cy="8" r="4.5" fill="none" stroke="white" stroke-width="1"/>
         <text x="155" y="11" text-anchor="middle" font-size="5.5" fill="white" font-family="sans-serif" font-weight="700">R</text>
       </svg>
@@ -252,17 +268,26 @@ body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:14p
       <span class="logo-badge">Business</span>
     </div>
     <div class="hdr-right">
-      <div class="hdr-label">Cocoa Business</div>
-      <div class="hdr-name">Variable Salary</div>
-      <div class="hdr-sub">Calculadora de ahorro · Bolivia 2026</div>
+      <div class="hdr-label">Propuesta para</div>
+      <div class="hdr-name">NexoCorp Holding Bolivia</div>
+      <div class="hdr-sub">Mayo 2026 · Confidencial</div>
     </div>
   </div>
 </header>
 
+<div class="hstrip">
+  <div class="hstrip-inner">
+    <span class="hpill on">Farmacorp</span>
+    <span class="hpill on">Amarket</span>
+    <span class="hpill on">Farmaclub</span>
+    <span class="hpill">+ Nuevas unidades elegibles</span>
+  </div>
+</div>
+
 <div class="hero">
   <div class="hero-inner">
-    <div class="hero-eyebrow">Variable Salary · Calculadora de ahorro</div>
-    <h1 class="hero-h1">Tu empresa puede ahorrar hasta <em id="hero_usd">USD 118,000</em> al año<br>pagando comisiones a través de Cocoa.</h1>
+    <div class="hero-eyebrow">Variable Salary · Calculadora de ahorro para holding</div>
+    <h1 class="hero-h1">NexoCorp puede ahorrar hasta <em id="hero_usd">USD 118,000</em> al año<br>pagando comisiones a través de Cocoa.</h1>
     <p class="hero-sub">La carga patronal real en Bolivia es del <strong>34.38%</strong> sobre cada boliviano variable. Con Cocoa Business el costo neto baja a <strong>−3%</strong> al incorporar el crédito fiscal IVA del 13%.</p>
     <div class="kpi-row">
       <div class="kpi"><div class="kpi-val accent" id="hk_ahorro">Bs 820K</div><div class="kpi-lbl">Ahorro anual estimado</div></div>
@@ -276,11 +301,21 @@ body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:14p
 
 <main class="main">
 
-  <div class="sec-lbl">Escenario</div>
+  <div class="bu-bar">
+    <span class="bu-lbl">Unidad</span>
+    <div class="bu-btns">
+      <button class="bu-btn active" onclick="setBU('farmacorp',this)">Farmacorp</button>
+      <button class="bu-btn" onclick="setBU('amarket',this)">Amarket</button>
+      <button class="bu-btn" onclick="setBU('farmaclub',this)">Farmaclub</button>
+      <button class="bu-btn" onclick="setBU('holding',this)">Holding completo</button>
+    </div>
+  </div>
+
+  <div class="sec-lbl">Escenario NexoCorp</div>
   <div class="sc-row">
     <button class="sc-btn" onclick="loadScenario('A',this)">Piloto — 50 emp / Bs 4,500</button>
-    <button class="sc-btn active" onclick="loadScenario('B',this)">Mediano — 120 emp / Bs 6,000</button>
-    <button class="sc-btn" onclick="loadScenario('C',this)">Amplio — 250 emp / Bs 8,000</button>
+    <button class="sc-btn active" onclick="loadScenario('B',this)">Expansión — 120 emp / Bs 6,000</button>
+    <button class="sc-btn" onclick="loadScenario('C',this)">Holding completo — 250 emp / Bs 8,000</button>
     <button class="sc-btn" onclick="loadScenario('custom',this)">Personalizar</button>
   </div>
 
@@ -289,7 +324,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:14p
       <div class="sr"><input type="range" id="c_monto" min="200" max="25000" value="6000" step="100" oninput="calc()"><span class="sv" id="o_monto">Bs 6,000</span></div>
     </div>
     <div class="sf"><label>Colaboradores con variable</label>
-      <div class="sr"><input type="number" id="c_emp" min="1" max="10000" value="120" step="1" oninput="calc()" class="num-input"></div>
+      <div class="sr"><input type="range" id="c_emp" min="1" max="3500" value="120" step="5" oninput="calc()"><span class="sv" id="o_emp">120 emp.</span></div>
     </div>
     <div class="sf"><label>Pagos variables al año</label>
       <div class="sr"><input type="range" id="c_pag" min="1" max="24" value="12" step="1" oninput="calc()"><span class="sv" id="o_pag">12 pagos</span></div>
@@ -339,16 +374,16 @@ body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:14p
       <div class="line"><span class="ll">AFP · CNS · Provisiones</span><span class="lv pos">Bs 0</span></div>
       <div class="subsec">Lo que recibe el colaborador</div>
       <div class="line"><span class="ll">Puntos asignados (1 : 1)</span><span class="lv pos" id="r_puntos">—</span></div>
-      <div class="line"><span class="ll">Usar en la red Cocoa</span><span class="lv pos">100% + cashback</span></div>
+      <div class="line"><span class="ll">Usar en Farmacorp · Amarket · red Cocoa</span><span class="lv pos">100% + cashback</span></div>
       <div class="line"><span class="ll">Cash-out a cuenta (−6%)</span><span class="lv dim" id="r_cashOut">—</span></div>
       <div class="card-total"><span class="ct-lbl">Costo bruto empleador</span><span class="ct-val purple" id="r_totalCocoa">—</span></div>
       <div class="cf-box">
-        <div class="cf-row"><span style="color:var(--label);font-size:12px">Crédito fiscal recuperado (13%)</span><span class="cf-val" id="r_cfRecovery">—</span></div>
-        <div class="cf-row total"><strong style="font-size:12px">Costo neto efectivo empleador</strong><span class="cf-val" id="r_netoCocoa">—</span></div>
+        <div class="cf-row"><span style="color:var(--label);font-size:12px">Crédito fiscal recuperado NexoCorp (13%)</span><span class="cf-val" id="r_cfRecovery">—</span></div>
+        <div class="cf-row total"><strong style="font-size:12px">Costo neto efectivo NexoCorp</strong><span class="cf-val" id="r_netoCocoa">—</span></div>
       </div>
       <div class="emp-box" style="background:var(--green-lo);border-color:rgba(26,158,117,0.15)">
         <div class="emp-row"><span>Puntos recibidos</span><span class="er-v" style="color:var(--green)" id="e_puntos">—</span></div>
-        <div class="emp-row"><span>Si gasta en red Cocoa</span><span class="er-v" style="color:var(--green)" id="e_gasta">—</span></div>
+        <div class="emp-row"><span>Si gasta en Farmacorp / Amarket</span><span class="er-v" style="color:var(--green)" id="e_gasta">—</span></div>
         <div class="emp-row"><span>Si hace cash-out (neto −6%)</span><span class="er-v" id="e_cashNeto">—</span></div>
         <div class="emp-row" style="border-top:1px solid rgba(26,158,117,0.2);margin-top:5px;padding-top:5px"><span><strong>Diferencia vs planilla neto</strong></span><span class="er-v"><strong style="color:var(--green)" id="e_diff">—</strong></span></div>
       </div>
@@ -356,17 +391,17 @@ body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:14p
   </div>
 
   <div class="bar-wrap">
-    <div class="sec-lbl" style="margin-bottom:14px">Costo total mensual</div>
+    <div class="sec-lbl" style="margin-bottom:14px">Costo total mensual — holding NexoCorp</div>
     <div class="bar-row"><span class="bar-name">Planilla tradicional</span><div class="bar-track"><div class="bar-fill bf1" id="bar_trad" style="width:100%"><span id="bv_trad">—</span></div></div></div>
     <div class="bar-row"><span class="bar-name">Cocoa Business (bruto)</span><div class="bar-track"><div class="bar-fill bf2" id="bar_cocoa"><span id="bv_cocoa">—</span></div></div></div>
     <div class="bar-row"><span class="bar-name">Cocoa + CF recuperado</span><div class="bar-track"><div class="bar-fill bf3" id="bar_neto"><span id="bv_neto">—</span></div></div></div>
     <div class="bar-row"><span class="bar-name">Ahorro mensual neto</span><div class="bar-track"><div class="bar-fill bf4" id="bar_sav"><span id="bv_sav">—</span></div></div></div>
   </div>
 
-  <div class="sec-lbl">¿Qué gana tu equipo?</div>
+  <div class="sec-lbl">¿Qué gana el equipo de NexoCorp?</div>
   <div class="benefit-grid">
     <div class="bc"><div class="bc-lbl">Neto en planilla hoy</div><div class="bc-val red" id="eb_neto">—</div><div class="bc-sub">Tras AFP + RC + CNS laboral (12.71%)</div></div>
-    <div class="bc"><div class="bc-lbl">Puntos Cocoa recibidos</div><div class="bc-val green" id="eb_cocoa">—</div><div class="bc-sub">100% del nominal · Cashback en la red Cocoa</div></div>
+    <div class="bc"><div class="bc-lbl">Puntos Cocoa recibidos</div><div class="bc-val green" id="eb_cocoa">—</div><div class="bc-sub">100% del nominal · Cashback en Farmacorp y Amarket</div></div>
     <div class="bc"><div class="bc-lbl">Diferencia a favor</div><div class="bc-val purple" id="eb_gain">—</div><div class="bc-sub">Más poder de compra por colaborador</div></div>
     <div class="bc"><div class="bc-lbl">Cash-out disponible</div><div class="bc-val teal" id="eb_cash">—</div><div class="bc-sub">Si retira a cuenta bancaria (−6% comisión)</div></div>
   </div>
@@ -378,7 +413,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:14p
       <span class="ww-badge">Interactivo</span>
     </div>
     <div class="slrow">
-      <span class="slrow-lbl">% Gasta en la red Cocoa</span>
+      <span class="slrow-lbl">% Gasta en red Cocoa / NexoCorp</span>
       <input type="range" id="w_pctCocoa" min="0" max="100" value="20" step="5" oninput="calcWorker()">
       <span class="slrow-val" id="wo_cocoa">20%</span>
     </div>
@@ -387,7 +422,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:14p
       <div class="sp-co" id="sv_cash" style="flex:80"><span id="sv_cash_label">80% Cash-out</span></div>
     </div>
     <div class="split-legend">
-      <div class="sl-i"><div class="sl-dot" style="background:var(--purple)"></div><span>Gasta en la red Cocoa (+1% cashback)</span></div>
+      <div class="sl-i"><div class="sl-dot" style="background:var(--purple)"></div><span>Gasta en Farmacorp · Amarket · red Cocoa (+1% cashback)</span></div>
       <div class="sl-i"><div class="sl-dot" style="background:var(--teal)"></div><span>Cash-out a cuenta bancaria (−6%)</span></div>
     </div>
     <div class="wcr-row">
@@ -407,24 +442,27 @@ body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:14p
   <div class="sec-lbl">Los 3 escenarios · Resumen comparativo</div>
   <div class="tbl-wrap">
     <table class="sum-table">
-      <thead><tr><th>Escenario</th><th>Emp.</th><th>Variable/emp</th><th>Planilla / año</th><th>Cocoa bruto / año</th><th>CF recuperado</th><th>Costo neto Cocoa</th><th>Ahorro anual</th><th>Ahorro USD</th></tr></thead>
+      <thead><tr><th>Escenario</th><th>Alcance</th><th>Emp.</th><th>Variable/emp</th><th>Planilla / año</th><th>Cocoa bruto / año</th><th>CF recuperado</th><th>Costo neto Cocoa</th><th>Ahorro anual</th><th>Ahorro USD</th></tr></thead>
       <tbody>
         <tr id="row_a">
           <td><span class="sc-dot a"></span>Piloto</td>
+          <td style="color:var(--label);font-size:11px">Farmacorp (1 BU)</td>
           <td>50</td><td>Bs 4,500</td>
           <td class="num strike" id="t_tradA">—</td><td class="num" id="t_brutA">—</td>
           <td class="num teal" id="t_cfA">—</td><td class="num" id="t_netA">—</td>
           <td class="num pos" id="t_savA">—</td><td class="num pos" id="t_savUsdA">—</td>
         </tr>
         <tr id="row_b" class="hi">
-          <td><span class="sc-dot b"></span><strong>Mediano ★</strong></td>
+          <td><span class="sc-dot b"></span><strong>Expansión ★</strong></td>
+          <td style="color:var(--label);font-size:11px">Farmacorp + Amarket</td>
           <td>120</td><td>Bs 6,000</td>
           <td class="num strike" id="t_tradB">—</td><td class="num" id="t_brutB">—</td>
           <td class="num teal" id="t_cfB">—</td><td class="num" id="t_netB">—</td>
           <td class="num pos" id="t_savB">—</td><td class="num pos" id="t_savUsdB">—</td>
         </tr>
         <tr id="row_c">
-          <td><span class="sc-dot c"></span>Amplio</td>
+          <td><span class="sc-dot c"></span>Holding completo</td>
+          <td style="color:var(--label);font-size:11px">Todas las unidades</td>
           <td>250</td><td>Bs 8,000</td>
           <td class="num strike" id="t_tradC">—</td><td class="num" id="t_brutC">—</td>
           <td class="num teal" id="t_cfC">—</td><td class="num" id="t_netC">—</td>
@@ -435,18 +473,18 @@ body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:14p
   </div>
 
   <div class="note">
-    <strong>Metodología Bolivia 2026.</strong> Aportes patronales: AFP 3% + Riesgo Profesional 1.71% + CNS 10% + FONVIS 2% + Solidaridad 3.5% = 20.21%. Provisiones: Aguinaldo 8.33% + Vacaciones 4.17% + Quinquenio 1.67% = 14.17%. Total overhead planilla: <strong>34.38%</strong> (Ley 1582 vigente desde oct-2024). Deducciones laborales: AFP 10% + RC 1.71% + CNS 1% = 12.71%. <strong>Cocoa Business Enterprise:</strong> 10% service fee sobre monto fondeado + Bs 9/colaborador/mes. <strong>Crédito fiscal 13%:</strong> el empleador recupera el 13% del monto total facturado (monto + fee) como crédito fiscal IVA. <strong>Cash-out:</strong> 6% al colaborador al retirar a cuenta bancaria. <strong>Cashback:</strong> 1% al gastar en la red Cocoa. <strong>TC referencial BCB:</strong> Bs 6.96 / USD. Esta calculadora es referencial — consulte a su asesor legal-contable para el caso específico de su empresa.
+    <strong>Metodología Bolivia 2026.</strong> Aportes patronales: AFP 3% + Riesgo Profesional 1.71% + CNS 10% + FONVIS 2% + Solidaridad 3.5% = 20.21%. Provisiones: Aguinaldo 8.33% + Vacaciones 4.17% + Quinquenio 1.67% = 14.17%. Total overhead planilla: <strong>34.38%</strong> (Ley 1582 vigente desde oct-2024). Deducciones laborales: AFP 10% + RC 1.71% + CNS 1% = 12.71%. <strong>Cocoa Business Enterprise:</strong> 10% service fee sobre monto fondeado + Bs 9/colaborador/mes. <strong>Crédito fiscal 13%:</strong> NexoCorp recupera el 13% del monto total facturado (monto + fee) como crédito fiscal IVA. <strong>Cash-out:</strong> 6% al colaborador al retirar a cuenta bancaria. <strong>Cashback:</strong> 1% al gastar en la red Cocoa (incluye Farmacorp y Amarket). <strong>TC referencial BCB:</strong> Bs 6.96 / USD. Esta calculadora es referencial — consulte a su asesor legal-contable para el caso específico del holding.
   </div>
 
   <div class="cta">
-    <div><h3>¿Listos para activar Variable Salary en su empresa?</h3><p>En 20 minutos validamos los números exactos con la estructura de comisiones real de su operación.</p></div>
+    <div><h3>¿Listos para activar Variable Salary en NexoCorp?</h3><p>En 20 minutos validamos los números exactos con la estructura de comisiones real de Farmacorp y Amarket.</p></div>
     <button class="cta-btn">Coordinar reunión técnica</button>
   </div>
 
 </main>
 
 <footer class="footer">
-  Cocoa Business · Variable Salary · <span>luciano@cocoalatam.com</span>
+  Cocoa Business · Variable Salary · Propuesta para <span>NexoCorp Holding Bolivia</span> · Mayo 2026 · luciano@cocoalatam.com
 </footer>
 
 <script>
@@ -462,6 +500,8 @@ const fU=n=>'USD '+Math.round(n).toLocaleString('en-US');
 const fPct=n=>(n*100).toFixed(1)+'%';
 const SCENARIOS={A:{monto:4500,emp:50,pag:12},B:{monto:6000,emp:120,pag:12},C:{monto:8000,emp:250,pag:12}};
 
+function setBU(bu,btn){document.querySelectorAll('.bu-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+
 function loadScenario(key,btn){
   document.querySelectorAll('.sc-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
   if(key==='custom'){calc();return;}
@@ -476,11 +516,11 @@ function loadScenario(key,btn){
 }
 
 function calc(){
-  const M=parseFloat(document.getElementById('c_monto').value)||0;
-  let E=parseInt(document.getElementById('c_emp').value);
-  if(isNaN(E)||E<1)E=1;
-  const P=parseInt(document.getElementById('c_pag').value)||1;
+  const M=parseFloat(document.getElementById('c_monto').value);
+  const E=parseInt(document.getElementById('c_emp').value);
+  const P=parseInt(document.getElementById('c_pag').value);
   document.getElementById('o_monto').textContent=fBs(M);
+  document.getElementById('o_emp').textContent=E+' emp.';
   document.getElementById('o_pag').textContent=P+(P===1?' pago':' pagos');
 
   const afpP=M*AFP_PAT,riesP=M*RIESGO,cnsP=M*CNS_PAT,fonP=M*FONVIS,solP=M*SOLID;
@@ -490,7 +530,7 @@ function calc(){
   const brutoCocoa=M+feeAmt+saasPer;
   const cfRecov=(M+feeAmt)*CF;
   const netoCocoa=brutoCocoa-cfRecov;
-  const savEmp=tradEmp-netoCocoa,savPct=tradEmp>0?savEmp/tradEmp:0;
+  const savEmp=tradEmp-netoCocoa,savPct=savEmp/tradEmp;
   const afpL=M*AFP_LAB,rcL=M*RC_LAB,cnsL=M*CNS_LAB;
   const neto=M-afpL-rcL-cnsL,cashNeto=M*(1-CASHOUT),diffEmp=M-neto;
   const tradMonth=tradEmp*E;
@@ -539,12 +579,11 @@ function calc(){
   document.getElementById('e_diff').textContent='+'+fBs(diffEmp)+' más en mano';
   document.getElementById('bar_trad').style.width='100%';
   document.getElementById('bv_trad').textContent=fBs(tradMonth)+'/mes';
-  const safeRatio=tradMonth>0?100:0;
-  document.getElementById('bar_cocoa').style.width=(tradMonth>0?(brutoCocoaMonth/tradMonth*100).toFixed(1):0)+'%';
+  document.getElementById('bar_cocoa').style.width=(brutoCocoaMonth/tradMonth*100).toFixed(1)+'%';
   document.getElementById('bv_cocoa').textContent=fBs(brutoCocoaMonth)+'/mes';
-  document.getElementById('bar_neto').style.width=(tradMonth>0?(netoCocoaMonth/tradMonth*100).toFixed(1):0)+'%';
+  document.getElementById('bar_neto').style.width=(netoCocoaMonth/tradMonth*100).toFixed(1)+'%';
   document.getElementById('bv_neto').textContent=fBs(netoCocoaMonth)+'/mes';
-  document.getElementById('bar_sav').style.width=Math.max(0,(tradMonth>0?(savMonth/tradMonth*100):0)).toFixed(1)+'%';
+  document.getElementById('bar_sav').style.width=Math.max(0,(savMonth/tradMonth*100)).toFixed(1)+'%';
   document.getElementById('bv_sav').textContent=fBs(savMonth)+'/mes';
   document.getElementById('eb_neto').textContent=fBs(neto);
   document.getElementById('eb_cocoa').textContent=Math.round(M).toLocaleString('es-BO')+' pts';
@@ -554,7 +593,7 @@ function calc(){
 }
 
 function calcWorker(){
-  const M=parseFloat(document.getElementById('c_monto').value)||0;
+  const M=parseFloat(document.getElementById('c_monto').value);
   const pctC=parseFloat(document.getElementById('w_pctCocoa').value)/100;
   const pctCO=1-pctC;
   document.getElementById('wo_cocoa').textContent=Math.round(pctC*100)+'%';
@@ -568,7 +607,7 @@ function calcWorker(){
   const cocoaValue=M*pctC*(1+CASHBACK),cashValue=M*pctCO*(1-CASHOUT);
   const totalPoder=cocoaValue+cashValue;
   const tradNeto=M*(1-AFP_LAB-RC_LAB-CNS_LAB);
-  const delta=totalPoder-tradNeto,deltaPct=tradNeto>0?delta/tradNeto:0;
+  const delta=totalPoder-tradNeto,deltaPct=delta/tradNeto;
   document.getElementById('wcr_trad').textContent=fBs(tradNeto);
   document.getElementById('wcr_poder').textContent=fBs(totalPoder);
   document.getElementById('wcr_delta').textContent=(delta>=0?'+':'')+fBs(delta);
