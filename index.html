@@ -186,6 +186,42 @@ body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:14p
 .bb-row:last-child{border-bottom:none;border-top:1.5px solid var(--border-str);padding-top:8px;margin-top:4px;}
 .bb-v{font-family:var(--mono);font-size:11.5px;font-weight:600;}
 
+/* ROI CALCULATOR */
+.roi-wrap{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--orange);border-radius:var(--r);padding:1.75rem;margin-bottom:1.25rem;box-shadow:var(--sh);}
+.roi-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border);}
+.roi-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.roi-sub{font-size:12px;color:var(--label);line-height:1.6;}
+.roi-sub strong{color:var(--ink);font-weight:600;}
+.roi-badge{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;background:var(--orange);color:var(--ink);padding:4px 11px;border-radius:100px;white-space:nowrap;}
+.roi-input-row{display:flex;align-items:center;gap:14px;margin-bottom:1.25rem;padding:14px 16px;background:var(--bg);border-radius:var(--r-sm);border:1px solid var(--border);flex-wrap:wrap;}
+.roi-input-lbl{font-size:9.5px;font-weight:700;color:var(--label);text-transform:uppercase;letter-spacing:0.07em;min-width:230px;}
+.roi-input-row .num-input{max-width:160px;}
+.roi-input-note{font-size:11px;color:var(--muted);font-family:var(--mono);margin-left:auto;}
+.roi-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.25rem;}
+.roi-card{border-radius:var(--r-sm);padding:14px 16px;border:1px solid var(--border);background:var(--bg);}
+.roi-card.cost{background:var(--red-lo);border-color:rgba(200,60,60,0.14);}
+.roi-card.rate{background:var(--teal-lo);border-color:rgba(11,157,152,0.18);}
+.roi-card.be{background:rgba(239,163,69,0.10);border-color:rgba(239,163,69,0.28);}
+.roi-card-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:6px;color:var(--label);}
+.roi-card-val{font-family:var(--mono);font-size:21px;font-weight:700;}
+.roi-card-val.cost{color:var(--red);}
+.roi-card-val.rate{color:var(--teal);}
+.roi-card-val.be{color:#c47d1a;}
+.roi-card-sub{font-size:10px;color:var(--muted);margin-top:4px;line-height:1.5;}
+.roi-current{background:var(--ink);border-radius:var(--r-sm);padding:1.25rem 1.5rem;margin-top:0.25rem;}
+.roi-current-title{font-size:10px;color:rgba(255,255,255,0.55);font-weight:600;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.08em;}
+.roi-current-title strong{color:var(--orange);font-family:var(--mono);font-weight:500;}
+.roi-current-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;}
+.roi-cg-item{display:flex;flex-direction:column;}
+.roi-cg-lbl{font-size:9px;text-transform:uppercase;letter-spacing:0.09em;color:rgba(255,255,255,0.4);font-weight:600;margin-bottom:4px;}
+.roi-cg-val{font-family:var(--mono);font-size:16px;font-weight:600;color:rgba(255,255,255,0.85);}
+.roi-cg-val.pos{color:#4de8b0;}
+.roi-cg-val.warn{color:var(--orange);}
+@media(max-width:800px){
+  .roi-grid{grid-template-columns:1fr;}
+  .roi-current-grid{grid-template-columns:1fr 1fr;}
+}
+
 /* TABLE */
 .tbl-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);margin-bottom:1.25rem;}
 .sum-table{width:100%;border-collapse:collapse;font-size:12px;}
@@ -263,13 +299,13 @@ body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:14p
   <div class="hero-inner">
     <div class="hero-eyebrow">Variable Salary · Calculadora de ahorro</div>
     <h1 class="hero-h1">Tu empresa puede ahorrar hasta <em id="hero_usd">USD 118,000</em> al año<br>pagando comisiones a través de Cocoa.</h1>
-    <p class="hero-sub">La carga patronal real en Bolivia es del <strong>34.38%</strong> sobre cada boliviano variable. Con Cocoa Business el costo neto baja a <strong>−3%</strong> al incorporar el crédito fiscal IVA del 13%.</p>
+    <p class="hero-sub">La carga patronal real en Bolivia es del <strong>34.38%</strong> sobre cada boliviano variable. Con Cocoa Business el costo neto se vuelve <strong>casi nulo</strong> al incorporar el crédito fiscal IVA del 13%.</p>
     <div class="kpi-row">
       <div class="kpi"><div class="kpi-val accent" id="hk_ahorro">Bs 820K</div><div class="kpi-lbl">Ahorro anual estimado</div></div>
       <div class="kpi"><div class="kpi-val pos" id="hk_pct">24.2%</div><div class="kpi-lbl">Reducción del costo variable</div></div>
       <div class="kpi"><div class="kpi-val" id="hk_emp">+Bs 770</div><div class="kpi-lbl">Más en mano por colaborador</div></div>
       <div class="kpi"><div class="kpi-val" id="hk_cf">Bs 0</div><div class="kpi-lbl">Crédito fiscal recuperado</div></div>
-      <div class="kpi"><div class="kpi-val" id="hk_overhead">34.38% → −3%</div><div class="kpi-lbl">Overhead real → neto Cocoa + CF</div></div>
+      <div class="kpi"><div class="kpi-val" id="hk_overhead">34.38% → −1.4%</div><div class="kpi-lbl">Overhead real → neto Cocoa + CF</div></div>
     </div>
   </div>
 </div>
@@ -334,8 +370,8 @@ body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:14p
       </div>
       <div class="subsec">Fondeo de puntos</div>
       <div class="line"><span class="ll">Monto a distribuir</span><span class="lv neu" id="r_cMonto">—</span></div>
-      <div class="line"><span class="ll">Service fee Cocoa (10%)</span><span class="lv neg" id="r_cFee">—</span></div>
-      <div class="line"><span class="ll">Plan Enterprise (Bs 9 / colaborador)</span><span class="lv neg" id="r_saas">—</span></div>
+      <div class="line"><span class="ll">Service fee Cocoa (13%)</span><span class="lv neg" id="r_cFee">—</span></div>
+      <div class="line"><span class="ll">Plan Enterprise (Bs 700/mes base + Bs 10/colab)</span><span class="lv neg" id="r_saas">—</span></div>
       <div class="line"><span class="ll">AFP · CNS · Provisiones</span><span class="lv pos">Bs 0</span></div>
       <div class="subsec">Lo que recibe el colaborador</div>
       <div class="line"><span class="ll">Puntos asignados (1 : 1)</span><span class="lv pos" id="r_puntos">—</span></div>
@@ -404,6 +440,51 @@ body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:14p
     </div>
   </div>
 
+  <div class="sec-lbl">Calculadora ROI · Break-even Cocoa</div>
+  <div class="roi-wrap">
+    <div class="roi-head">
+      <div>
+        <div class="roi-title">¿Cuánto debes distribuir en puntos para recuperar la inversión?</div>
+        <div class="roi-sub">Cocoa Enterprise cuesta <strong>Bs 700/mes fijo + Bs 10 por colaborador</strong>. Por cada Bs que distribuyes en variable ahorras <strong>Bs 0.36</strong> vs. planilla tradicional. Aquí ves el break-even y el ROI a tu configuración.</div>
+      </div>
+      <span class="roi-badge">ROI</span>
+    </div>
+
+    <div class="roi-input-row">
+      <span class="roi-input-lbl">Colaboradores en plan Cocoa</span>
+      <input type="number" id="roi_emp" min="1" max="10000" value="120" step="1" class="num-input" oninput="calcROI()">
+      <span class="roi-input-note" id="roi_emp_note">Fee fijo Cocoa: Bs 1,900/mes</span>
+    </div>
+
+    <div class="roi-grid">
+      <div class="roi-card cost">
+        <div class="roi-card-lbl">Costo fijo mensual Cocoa</div>
+        <div class="roi-card-val cost" id="roi_cost">Bs 1,900</div>
+        <div class="roi-card-sub">Bs 700 base + Bs 10 × <span id="roi_e1">120</span> colab.</div>
+      </div>
+      <div class="roi-card rate">
+        <div class="roi-card-lbl">Ahorro neto por Bs distribuido</div>
+        <div class="roi-card-val rate" id="roi_rate">Bs 0.36</div>
+        <div class="roi-card-sub">34.38% planilla evitada + 1.7% neto por CF − fee 13%</div>
+      </div>
+      <div class="roi-card be">
+        <div class="roi-card-lbl">Break-even mensual</div>
+        <div class="roi-card-val be" id="roi_be_total">Bs 5,267</div>
+        <div class="roi-card-sub" id="roi_be_per">≈ Bs 44 / colab / mes en variable</div>
+      </div>
+    </div>
+
+    <div class="roi-current">
+      <div class="roi-current-title">A tu configuración actual: <strong id="roi_m_cur">Bs 6,000</strong> / colaborador · <strong id="roi_e_cur">120</strong> colab.</div>
+      <div class="roi-current-grid">
+        <div class="roi-cg-item"><span class="roi-cg-lbl">Distribuyes en puntos</span><span class="roi-cg-val" id="roi_distrib">Bs 720K/mes</span></div>
+        <div class="roi-cg-item"><span class="roi-cg-lbl">Costo Cocoa fijo</span><span class="roi-cg-val warn" id="roi_costFijo">Bs 1.9K/mes</span></div>
+        <div class="roi-cg-item"><span class="roi-cg-lbl">Ahorro neto vs planilla</span><span class="roi-cg-val pos" id="roi_save">Bs 258K/mes</span></div>
+        <div class="roi-cg-item"><span class="roi-cg-lbl">ROI sobre fee fijo</span><span class="roi-cg-val pos" id="roi_mult">135×</span></div>
+      </div>
+    </div>
+  </div>
+
   <div class="sec-lbl">Los 3 escenarios · Resumen comparativo</div>
   <div class="tbl-wrap">
     <table class="sum-table">
@@ -435,7 +516,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:14p
   </div>
 
   <div class="note">
-    <strong>Metodología Bolivia 2026.</strong> Aportes patronales: AFP 3% + Riesgo Profesional 1.71% + CNS 10% + FONVIS 2% + Solidaridad 3.5% = 20.21%. Provisiones: Aguinaldo 8.33% + Vacaciones 4.17% + Quinquenio 1.67% = 14.17%. Total overhead planilla: <strong>34.38%</strong> (Ley 1582 vigente desde oct-2024). Deducciones laborales: AFP 10% + RC 1.71% + CNS 1% = 12.71%. <strong>Cocoa Business Enterprise:</strong> 10% service fee sobre monto fondeado + Bs 9/colaborador/mes. <strong>Crédito fiscal 13%:</strong> el empleador recupera el 13% del monto total facturado (monto + fee) como crédito fiscal IVA. <strong>Cash-out:</strong> 6% al colaborador al retirar a cuenta bancaria. <strong>Cashback:</strong> 1% al gastar en la red Cocoa. <strong>TC referencial BCB:</strong> Bs 6.96 / USD. Esta calculadora es referencial — consulte a su asesor legal-contable para el caso específico de su empresa.
+    <strong>Metodología Bolivia 2026.</strong> Aportes patronales: AFP 3% + Riesgo Profesional 1.71% + CNS 10% + FONVIS 2% + Solidaridad 3.5% = 20.21%. Provisiones: Aguinaldo 8.33% + Vacaciones 4.17% + Quinquenio 1.67% = 14.17%. Total overhead planilla: <strong>34.38%</strong> (Ley 1582 vigente desde oct-2024). Deducciones laborales: AFP 10% + RC 1.71% + CNS 1% = 12.71%. <strong>Cocoa Business Enterprise:</strong> 13% service fee sobre monto fondeado + Bs 700/mes base + Bs 10 por colaborador. <strong>Crédito fiscal 13%:</strong> el empleador recupera el 13% del monto total facturado (monto + fee) como crédito fiscal IVA. <strong>Cash-out:</strong> 6% al colaborador al retirar a cuenta bancaria. <strong>Cashback:</strong> 1% al gastar en la red Cocoa. <strong>TC referencial BCB:</strong> Bs 6.96 / USD. Esta calculadora es referencial — consulte a su asesor legal-contable para el caso específico de su empresa.
   </div>
 
   <div class="cta">
@@ -454,7 +535,7 @@ const TC=6.96;
 const AFP_PAT=0.03,RIESGO=0.0171,CNS_PAT=0.10,FONVIS=0.02,SOLID=0.035;
 const AGU=0.0833,VAC=0.0417,QUINQ=0.0167;
 const AFP_LAB=0.10,RC_LAB=0.0171,CNS_LAB=0.01;
-const FEE=0.10,CASHOUT=0.06,CF=0.13,CASHBACK=0.01,SAAS_PER_EMP=9;
+const FEE=0.13,CASHOUT=0.06,CF=0.13,CASHBACK=0.01,SAAS_BASE=700,SAAS_PER_EMP=10;
 const TOTAL_PATRON=AFP_PAT+RIESGO+CNS_PAT+FONVIS+SOLID+AGU+VAC+QUINQ;
 const fBs=n=>'Bs '+Math.round(n).toLocaleString('es-BO');
 const fNeg=n=>'−Bs '+Math.round(n).toLocaleString('es-BO');
@@ -469,6 +550,7 @@ function loadScenario(key,btn){
   document.getElementById('c_monto').value=s.monto;
   document.getElementById('c_emp').value=s.emp;
   document.getElementById('c_pag').value=s.pag;
+  document.getElementById('roi_emp').value=s.emp;
   ['row_a','row_b','row_c'].forEach(id=>document.getElementById(id).classList.remove('hi'));
   const rm={A:'row_a',B:'row_b',C:'row_c'};
   if(rm[key])document.getElementById(rm[key]).classList.add('hi');
@@ -486,7 +568,7 @@ function calc(){
   const afpP=M*AFP_PAT,riesP=M*RIESGO,cnsP=M*CNS_PAT,fonP=M*FONVIS,solP=M*SOLID;
   const aguP=M*AGU,vacP=M*VAC,quiP=M*QUINQ;
   const tradEmp=M*(1+TOTAL_PATRON);
-  const feeAmt=M*FEE,saasPer=SAAS_PER_EMP;
+  const feeAmt=M*FEE,saasPer=SAAS_BASE/E+SAAS_PER_EMP;
   const brutoCocoa=M+feeAmt+saasPer;
   const cfRecov=(M+feeAmt)*CF;
   const netoCocoa=brutoCocoa-cfRecov;
@@ -494,7 +576,7 @@ function calc(){
   const afpL=M*AFP_LAB,rcL=M*RC_LAB,cnsL=M*CNS_LAB;
   const neto=M-afpL-rcL-cnsL,cashNeto=M*(1-CASHOUT),diffEmp=M-neto;
   const tradMonth=tradEmp*E;
-  const brutoCocoaMonth=(M*(1+FEE)+SAAS_PER_EMP)*E;
+  const brutoCocoaMonth=M*(1+FEE)*E+SAAS_BASE+SAAS_PER_EMP*E;
   const cfMonth=(M*(1+FEE))*E*CF;
   const netoCocoaMonth=brutoCocoaMonth-cfMonth;
   const savMonth=tradMonth-netoCocoaMonth;
@@ -507,6 +589,8 @@ function calc(){
   document.getElementById('hk_pct').textContent=fPct(savPct);
   document.getElementById('hk_emp').textContent='+'+fBs(diffEmp);
   document.getElementById('hk_cf').textContent='Bs '+(cfAnnual>=1000000?(cfAnnual/1000000).toFixed(1)+'M':Math.round(cfAnnual/1000)+'K');
+  const ovh=(1+FEE)*(1-CF)-1+(M>0?(SAAS_BASE/E+SAAS_PER_EMP)/M:0);
+  document.getElementById('hk_overhead').textContent='34.38% → '+(ovh>=0?'+':'')+(ovh*100).toFixed(1)+'%';
   document.getElementById('ban_trad').textContent=fBs(tradAnnual);
   document.getElementById('ban_sav').textContent=fBs(savAnnual);
   document.getElementById('ban_savusd').textContent='≈ '+fU(savUSD);
@@ -550,7 +634,37 @@ function calc(){
   document.getElementById('eb_cocoa').textContent=Math.round(M).toLocaleString('es-BO')+' pts';
   document.getElementById('eb_gain').textContent='+'+fBs(diffEmp);
   document.getElementById('eb_cash').textContent=fBs(cashNeto);
-  updateTable();calcWorker();
+  updateTable();calcWorker();calcROI();
+}
+
+function calcROI(){
+  const M=parseFloat(document.getElementById('c_monto').value)||0;
+  let E=parseInt(document.getElementById('roi_emp').value);
+  if(isNaN(E)||E<1)E=1;
+  const SAVE_RATE=(1+TOTAL_PATRON)-(1+FEE)*(1-CF);
+  const fixed=SAAS_BASE+SAAS_PER_EMP*E;
+  const beTotal=fixed/SAVE_RATE;
+  const bePer=beTotal/E;
+  const distrib=M*E;
+  const saveCocoa=distrib*SAVE_RATE-fixed;
+  const roi=fixed>0?saveCocoa/fixed:0;
+  const fK=n=>{const a=Math.abs(n);return a>=1000000?(n/1000000).toFixed(1)+'M':a>=10000?Math.round(n/1000)+'K':a>=1000?(n/1000).toFixed(1)+'K':Math.round(n).toLocaleString('es-BO');};
+  document.getElementById('roi_cost').textContent='Bs '+Math.round(fixed).toLocaleString('es-BO');
+  document.getElementById('roi_e1').textContent=E.toLocaleString('es-BO');
+  document.getElementById('roi_rate').textContent='Bs '+SAVE_RATE.toFixed(4);
+  document.getElementById('roi_be_total').textContent='Bs '+Math.round(beTotal).toLocaleString('es-BO');
+  document.getElementById('roi_be_per').textContent='≈ Bs '+Math.round(bePer).toLocaleString('es-BO')+' / colab / mes en variable';
+  document.getElementById('roi_emp_note').textContent='Fee fijo Cocoa: Bs '+Math.round(fixed).toLocaleString('es-BO')+'/mes';
+  document.getElementById('roi_m_cur').textContent='Bs '+Math.round(M).toLocaleString('es-BO');
+  document.getElementById('roi_e_cur').textContent=E.toLocaleString('es-BO');
+  document.getElementById('roi_distrib').textContent='Bs '+fK(distrib)+'/mes';
+  document.getElementById('roi_costFijo').textContent='Bs '+fK(fixed)+'/mes';
+  document.getElementById('roi_save').textContent=(saveCocoa>=0?'':'-')+'Bs '+fK(Math.abs(saveCocoa))+'/mes';
+  const saveEl=document.getElementById('roi_save');
+  saveEl.className='roi-cg-val '+(saveCocoa>=0?'pos':'warn');
+  document.getElementById('roi_mult').textContent=(roi>=0?(roi<10?roi.toFixed(1):Math.round(roi))+'×':'—');
+  const multEl=document.getElementById('roi_mult');
+  multEl.className='roi-cg-val '+(roi>=1?'pos':'warn');
 }
 
 function calcWorker(){
@@ -588,7 +702,7 @@ function calcWorker(){
 function updateTable(){
   [{s:'A',m:4500,e:50,p:12},{s:'B',m:6000,e:120,p:12},{s:'C',m:8000,e:250,p:12}].forEach(({s,m,e,p})=>{
     const trad=m*(1+TOTAL_PATRON)*e*p;
-    const bruto=(m*(1+FEE)+SAAS_PER_EMP)*e*p;
+    const bruto=(m*(1+FEE)*e+SAAS_BASE+SAAS_PER_EMP*e)*p;
     const cf=m*(1+FEE)*e*CF*p;
     const neto=bruto-cf,sav=trad-neto,usd=sav/TC;
     document.getElementById('t_tradA'.replace('A',s)).textContent=fBs(trad);
