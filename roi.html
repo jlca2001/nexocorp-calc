@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cocoa Business — Enterprise ROI Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:       #1a0d3b;
+  --purple:    #684fa3;
+  --purple-lo: rgba(104,79,163,0.08);
+  --purple-md: rgba(104,79,163,0.18);
+  --purple-lt: #8b72c4;
+  --orange:    #efa345;
+  --orange-lo: rgba(239,163,69,0.10);
+  --green:     #1a9e75;
+  --green-lo:  rgba(26,158,117,0.09);
+  --red:       #c83c3c;
+  --red-lo:    rgba(200,60,60,0.08);
+  --teal:      #0b9d98;
+  --teal-lo:   rgba(11,157,152,0.09);
+  --teal-md:   rgba(11,157,152,0.18);
+  --bg:        #f3f1f9;
+  --surface:   #ffffff;
+  --border:    #e2dced;
+  --border-str:#c8bfe6;
+  --label:     #7a6d99;
+  --muted:     #a398c0;
+  --mono:      'DM Mono', monospace;
+  --sans:      'Montserrat', sans-serif;
+  --r:         10px;
+  --r-sm:      6px;
+  --sh:        0 1px 3px rgba(26,13,59,0.06), 0 4px 14px rgba(26,13,59,0.05);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:14px;line-height:1.6;}
+
+/* HEADER */
+.hdr{background:var(--ink);border-bottom:1px solid rgba(255,255,255,0.05);}
+.hdr-inner{max-width:1180px;margin:0 auto;padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+.logo-group{display:flex;align-items:center;gap:12px;}
+.logo-svg{height:24px;width:auto;}
+.logo-sep{width:1px;height:18px;background:rgba(255,255,255,0.12);}
+.logo-badge{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--orange);}
+.hdr-right{text-align:right;}
+.hdr-label{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.28);margin-bottom:1px;}
+.hdr-name{font-size:13px;font-weight:700;color:#fff;}
+.hdr-sub{font-size:11px;color:rgba(255,255,255,0.32);}
+
+/* HERO */
+.hero{background:var(--ink);padding:2.5rem 2rem 3rem;}
+.hero-inner{max-width:1180px;margin:0 auto;}
+.hero-eyebrow{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:rgba(255,255,255,0.28);margin-bottom:14px;}
+.prospect-input-wrap{display:flex;align-items:center;gap:14px;margin-bottom:14px;flex-wrap:wrap;}
+.prospect-input-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.4);}
+.prospect-input{font-family:var(--sans);font-size:14px;font-weight:600;color:#fff;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);border-radius:var(--r-sm);padding:8px 14px;min-width:280px;outline:none;transition:border-color .12s,box-shadow .12s;}
+.prospect-input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(239,163,69,0.18);}
+.prospect-input::placeholder{color:rgba(255,255,255,0.3);}
+.hero-h1{font-size:28px;font-weight:800;color:#fff;line-height:1.22;margin-bottom:10px;max-width:820px;}
+.hero-h1 em{font-style:normal;color:var(--orange);}
+.hero-h1 .prospect-tag{color:var(--purple-lt);}
+.hero-sub{font-size:13px;color:rgba(255,255,255,0.4);max-width:640px;line-height:1.8;margin-bottom:2rem;}
+.hero-sub strong{color:rgba(255,255,255,0.6);font-weight:600;}
+.kpi-row{display:flex;gap:1px;background:rgba(255,255,255,0.05);border-radius:var(--r);overflow:hidden;}
+.kpi{flex:1;padding:16px 18px;background:rgba(255,255,255,0.025);}
+.kpi-val{font-family:var(--mono);font-size:17px;font-weight:500;color:rgba(255,255,255,0.75);margin-bottom:4px;}
+.kpi-val.accent{color:var(--orange);font-size:22px;}
+.kpi-val.pos{color:#4de8b0;}
+.kpi-val.teal{color:#5adcd8;}
+.kpi-val.purple{color:var(--purple-lt);}
+.kpi-lbl{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.09em;color:rgba(255,255,255,0.25);}
+
+/* MAIN */
+.main{max-width:1180px;margin:0 auto;padding:2.5rem 1.5rem 5rem;}
+.sec-lbl{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin-bottom:12px;padding-bottom:9px;border-bottom:1px solid var(--border);}
+.sec-lbl-inline{display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+.sec-lbl-tag{font-size:9px;font-weight:600;color:var(--muted);text-transform:none;letter-spacing:0.02em;font-style:italic;}
+
+/* COMPANY PRESETS */
+.preset-row{display:flex;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap;}
+.preset-btn{font-family:var(--sans);font-size:11.5px;font-weight:600;padding:9px 16px;border-radius:100px;border:1.5px solid var(--border-str);background:var(--surface);color:var(--label);cursor:pointer;transition:all .12s;display:flex;flex-direction:column;align-items:flex-start;gap:1px;line-height:1.15;box-shadow:var(--sh);}
+.preset-btn:hover{border-color:var(--purple);color:var(--purple);transform:translateY(-1px);}
+.preset-btn.active{background:var(--purple);border-color:var(--purple);color:#fff;box-shadow:0 2px 12px rgba(104,79,163,0.28);}
+.preset-btn strong{font-weight:700;font-size:12px;}
+.preset-btn small{font-size:9.5px;font-weight:500;opacity:0.7;}
+.preset-btn.active small{opacity:0.85;}
+
+/* PROFILE GRID */
+.profile-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;margin-bottom:1.5rem;box-shadow:var(--sh);}
+.pf{display:flex;flex-direction:column;gap:8px;}
+.pf label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--label);}
+.pf .num-input,.pf .select-input{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--ink);width:100%;padding:9px 12px;border:1.5px solid var(--border-str);border-radius:var(--r-sm);background:var(--surface);outline:none;transition:border-color .12s,box-shadow .12s;}
+.pf .select-input{font-family:var(--sans);}
+.pf .num-input:focus,.pf .select-input:focus{border-color:var(--purple);box-shadow:0 0 0 3px var(--purple-lo);}
+.pf-hint{font-size:10px;color:var(--muted);font-family:var(--mono);}
+
+/* BUCKET WRAP */
+.bucket{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.75rem;margin-bottom:1.25rem;box-shadow:var(--sh);}
+.bucket.emp{border-top:3px solid var(--purple);}
+.bucket.cust{border-top:3px solid var(--teal);}
+.bucket.admin{border-top:3px solid var(--orange);}
+.bucket-head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border);}
+.bucket-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.bucket-sub{font-size:12px;color:var(--label);line-height:1.55;max-width:540px;}
+.bucket-badge{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#fff;padding:4px 11px;border-radius:100px;white-space:nowrap;}
+.bucket-badge.p{background:var(--purple);}
+.bucket-badge.t{background:var(--teal);}
+.bucket-badge.o{background:var(--orange);color:var(--ink);}
+.bucket-subtotal{display:flex;align-items:center;justify-content:space-between;margin-top:1.25rem;padding:14px 18px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);}
+.bucket-subtotal .st-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:var(--label);}
+.bucket-subtotal .st-val{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--ink);}
+.bucket-subtotal.p .st-val{color:var(--purple);}
+.bucket-subtotal.t .st-val{color:var(--teal);}
+.bucket-subtotal.o .st-val{color:#c47d1a;}
+
+.lever-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem 1.5rem;margin-bottom:1.25rem;}
+.lever{display:flex;flex-direction:column;gap:8px;}
+.lever-lbl{font-size:9.5px;font-weight:700;color:var(--label);text-transform:uppercase;letter-spacing:0.07em;display:flex;justify-content:space-between;align-items:baseline;}
+.lever-val{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--ink);}
+.lever-val.p{color:var(--purple);}
+.lever-val.t{color:var(--teal);}
+.lever-val.o{color:#c47d1a;}
+.lever input[type=range]{-webkit-appearance:none;height:3px;border-radius:2px;outline:none;cursor:pointer;background:var(--border);width:100%;}
+.lever input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;cursor:pointer;}
+.lever.p input[type=range]::-webkit-slider-thumb{background:var(--purple);box-shadow:0 0 0 3px rgba(104,79,163,0.15);}
+.lever.t input[type=range]::-webkit-slider-thumb{background:var(--teal);box-shadow:0 0 0 3px rgba(11,157,152,0.15);}
+.lever.o input[type=range]::-webkit-slider-thumb{background:var(--orange);box-shadow:0 0 0 3px rgba(239,163,69,0.15);}
+
+/* RESULT CARDS */
+.res-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0.85rem;margin-bottom:0.5rem;}
+.res{border-radius:var(--r-sm);padding:14px 16px;border:1px solid var(--border);background:var(--bg);}
+.res.p{background:var(--purple-lo);border-color:var(--purple-md);}
+.res.t{background:var(--teal-lo);border-color:var(--teal-md);}
+.res.o{background:var(--orange-lo);border-color:rgba(239,163,69,0.28);}
+.res-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:var(--label);margin-bottom:6px;line-height:1.35;}
+.res-val{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--ink);}
+.res.p .res-val{color:var(--purple);}
+.res.t .res-val{color:var(--teal);}
+.res.o .res-val{color:#c47d1a;}
+.res-sub{font-size:10px;color:var(--muted);margin-top:4px;line-height:1.45;}
+
+/* CUSTOMER BUCKET COLLAPSED STATE */
+.bucket.collapsed .lever-grid,.bucket.collapsed .res-row,.bucket.collapsed .bucket-subtotal{display:none;}
+.bucket-empty-note{font-size:11px;color:var(--muted);padding:12px 0 4px;font-style:italic;display:none;}
+.bucket.collapsed .bucket-empty-note{display:block;}
+
+/* VERDICT BANNER */
+.verdict{background:var(--ink);border-radius:var(--r);padding:2rem 2.25rem;margin-bottom:1.25rem;}
+.verdict-head{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:1.25rem;margin-bottom:1.25rem;border-bottom:1px solid rgba(255,255,255,0.08);gap:1rem;flex-wrap:wrap;}
+.verdict-title{font-size:11px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.12em;}
+.verdict-hero{font-family:var(--mono);font-size:36px;font-weight:600;color:var(--orange);line-height:1.05;}
+.verdict-hero small{font-size:14px;color:rgba(255,255,255,0.4);margin-left:12px;font-weight:400;}
+.verdict-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;}
+.v-cell{display:flex;flex-direction:column;gap:5px;}
+.v-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:rgba(255,255,255,0.4);}
+.v-val{font-family:var(--mono);font-size:22px;font-weight:600;color:rgba(255,255,255,0.85);}
+.v-val.pos{color:#4de8b0;}
+.v-val.warn{color:var(--orange);}
+.v-sub{font-size:10.5px;color:rgba(255,255,255,0.35);font-family:var(--mono);}
+
+/* WATERFALL */
+.wf-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem 1.5rem;margin-bottom:1.25rem;box-shadow:var(--sh);}
+.wf-title{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:var(--muted);margin-bottom:12px;}
+.wf-bar{display:flex;height:32px;border-radius:6px;overflow:hidden;gap:2px;background:var(--bg);}
+.wf-seg{display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;color:#fff;font-family:var(--mono);transition:flex .35s cubic-bezier(.4,0,.2,1);white-space:nowrap;overflow:hidden;}
+.wf-seg.e{background:var(--purple);}
+.wf-seg.c{background:var(--teal);}
+.wf-seg.a{background:var(--orange);color:var(--ink);}
+.wf-legend{display:flex;gap:1.25rem;margin-top:11px;flex-wrap:wrap;}
+.wf-li{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--label);}
+.wf-dot{width:10px;height:10px;border-radius:2px;}
+
+/* NOTE */
+.note{font-size:11px;color:var(--muted);line-height:1.8;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px 18px;margin-bottom:1.5rem;}
+.note strong{color:var(--label);}
+
+/* CTA */
+.cta{background:var(--ink);border-radius:var(--r);padding:2rem 2.5rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;}
+.cta h3{font-size:16px;font-weight:700;color:#fff;margin-bottom:5px;}
+.cta p{font-size:12px;color:rgba(255,255,255,0.4);}
+.cta-btn{background:var(--orange);color:var(--ink);font-family:var(--sans);font-size:11.5px;font-weight:700;padding:13px 26px;border-radius:100px;border:none;cursor:pointer;text-transform:uppercase;letter-spacing:0.06em;white-space:nowrap;}
+.cta-btn:hover{opacity:0.88;}
+
+/* FOOTER */
+.footer{background:var(--ink);text-align:center;padding:1.25rem;font-size:10.5px;color:rgba(255,255,255,0.2);}
+.footer span{color:rgba(139,114,196,0.6);}
+
+@media(max-width:900px){
+  .kpi-row{flex-wrap:wrap;}
+  .kpi{flex:1 1 40%;}
+  .profile-grid{grid-template-columns:1fr 1fr;}
+  .lever-grid{grid-template-columns:1fr;}
+  .res-row{grid-template-columns:1fr 1fr;}
+  .verdict-grid{grid-template-columns:1fr 1fr;}
+  .verdict-hero{font-size:28px;}
+}
+@media(max-width:520px){
+  .profile-grid{grid-template-columns:1fr;}
+  .res-row{grid-template-columns:1fr;}
+  .verdict-grid{grid-template-columns:1fr;}
+  .main{padding:1.5rem 1rem 3rem;}
+  .hero-h1{font-size:22px;}
+  .prospect-input{min-width:auto;width:100%;}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-inner">
+    <div class="logo-group">
+      <svg class="logo-svg" viewBox="0 0 158 40" fill="white" xmlns="http://www.w3.org/2000/svg" aria-label="Cocoa">
+        <path d="M13,4 A13,13 0 0,0 13,36 L13,4 Z"/>
+        <circle cx="44" cy="20" r="13"/>
+        <path d="M75,4 A13,13 0 0,0 75,36 L75,4 Z"/>
+        <circle cx="106" cy="20" r="13"/>
+        <path d="M122,36 L150,36 L150,4 Z"/>
+        <circle cx="155" cy="8" r="4.5" fill="none" stroke="white" stroke-width="1"/>
+        <text x="155" y="11" text-anchor="middle" font-size="5.5" fill="white" font-family="sans-serif" font-weight="700">R</text>
+      </svg>
+      <div class="logo-sep"></div>
+      <span class="logo-badge">Enterprise ROI</span>
+    </div>
+    <div class="hdr-right">
+      <div class="hdr-label">Cocoa Business</div>
+      <div class="hdr-name">Total Value Calculator</div>
+      <div class="hdr-sub">Loyalty + Retention + Fiscal · Bolivia 2026</div>
+    </div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Sales tool · valor total anual entregado</div>
+    <div class="prospect-input-wrap">
+      <span class="prospect-input-lbl">Prospect</span>
+      <input type="text" id="prospect_name" class="prospect-input" placeholder="Nombre de la empresa (p.ej. Farmacorp)" oninput="calc()">
+    </div>
+    <h1 class="hero-h1">Cocoa puede entregarle a <em class="prospect-tag" id="hero_prospect">tu empresa</em> hasta <em id="hero_value">Bs 0</em> al año en valor.</h1>
+    <p class="hero-sub">La calculadora suma <strong>3 buckets</strong>: (1) retención + productividad + ahorro fiscal en variable, (2) revenue incremental por loyalty en clientes, y (3) tiempo ahorrado en administración. Todos los supuestos son <strong>editables en vivo</strong> — el CFO puede mover cualquier palanca y el número se recalcula.</p>
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val accent" id="hk_total">Bs 0</div><div class="kpi-lbl">Valor anual entregado</div></div>
+      <div class="kpi"><div class="kpi-val pos" id="hk_payback">— meses</div><div class="kpi-lbl">Payback period</div></div>
+      <div class="kpi"><div class="kpi-val" id="hk_roi">0×</div><div class="kpi-lbl">ROI multiplier</div></div>
+      <div class="kpi"><div class="kpi-val purple" id="hk_emp">Bs 0</div><div class="kpi-lbl">Bucket empleados</div></div>
+      <div class="kpi"><div class="kpi-val teal" id="hk_cust">Bs 0</div><div class="kpi-lbl">Bucket clientes</div></div>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+
+  <div class="sec-lbl sec-lbl-inline">
+    <span>Empresas ejemplo — Bolivia</span>
+    <span class="sec-lbl-tag">datos referenciales · validar antes de la reunión</span>
+  </div>
+  <div class="preset-row" id="preset_row">
+    <button class="preset-btn" data-key="farmacorp" onclick="loadPreset('farmacorp',this)"><strong>Farmacorp</strong><small>Retail farmacéutico</small></button>
+    <button class="preset-btn" data-key="tigo" onclick="loadPreset('tigo',this)"><strong>Tigo Bolivia</strong><small>Telecom</small></button>
+    <button class="preset-btn" data-key="cbn" onclick="loadPreset('cbn',this)"><strong>CBN</strong><small>Consumo masivo · B2B</small></button>
+    <button class="preset-btn" data-key="bnb" onclick="loadPreset('bnb',this)"><strong>BNB</strong><small>Financiero</small></button>
+    <button class="preset-btn" data-key="soboce" onclick="loadPreset('soboce',this)"><strong>SOBOCE</strong><small>Industrial · Cemento</small></button>
+  </div>
+
+  <div class="sec-lbl">Perfil de la empresa</div>
+  <div class="profile-grid">
+    <div class="pf">
+      <label>Sector</label>
+      <select class="select-input" id="c_sector" onchange="onSectorChange()">
+        <option value="retail">Retail / Consumo</option>
+        <option value="financiero">Financiero</option>
+        <option value="telecom">Telecom / Media</option>
+        <option value="industrial">Industrial / B2B</option>
+        <option value="servicios">Servicios</option>
+      </select>
+      <span class="pf-hint" id="c_sector_hint">Ajusta las palancas por defecto</span>
+    </div>
+    <div class="pf">
+      <label>Ingresos anuales (Bs)</label>
+      <input type="number" class="num-input" id="c_revenue" min="0" step="1000000" value="1200000000" oninput="calc()">
+      <span class="pf-hint" id="c_revenue_hint">≈ USD 172M</span>
+    </div>
+    <div class="pf">
+      <label>Colaboradores</label>
+      <input type="number" class="num-input" id="c_employees" min="1" step="10" value="2500" oninput="calc()">
+      <span class="pf-hint" id="c_employees_hint">Todos los colaboradores</span>
+    </div>
+    <div class="pf">
+      <label>Clientes activos (opcional)</label>
+      <input type="number" class="num-input" id="c_customers" min="0" step="1000" value="600000" oninput="calc()">
+      <span class="pf-hint">Deja en 0 si el negocio es puramente B2B</span>
+    </div>
+    <div class="pf">
+      <label>Salario promedio anual (Bs)</label>
+      <input type="number" class="num-input" id="c_avgSalary" min="0" step="1000" value="48000" oninput="calc()">
+      <span class="pf-hint" id="c_avgSalary_hint">Sector default</span>
+    </div>
+    <div class="pf">
+      <label>% de payroll pagado como variable</label>
+      <input type="number" class="num-input" id="c_pctVariable" min="0" max="100" step="1" value="12" oninput="calc()">
+      <span class="pf-hint">Comisiones, bonos, incentivos</span>
+    </div>
+  </div>
+
+  <!-- BUCKET 1: EMPLOYEE -->
+  <div class="bucket emp">
+    <div class="bucket-head">
+      <div>
+        <div class="bucket-title">Bucket 1 · Empleados</div>
+        <div class="bucket-sub">Retención + productividad + ahorro fiscal de variable salary. La reducción de turnover suele ser el valor más grande para empresas grandes; cada colaborador que no se va vale entre 40% y 100% de su salario anual.</div>
+      </div>
+      <span class="bucket-badge p">Empleados</span>
+    </div>
+
+    <div class="lever-grid">
+      <div class="lever p">
+        <div class="lever-lbl"><span>Turnover rate anual</span><span class="lever-val p" id="lv_turnover">30%</span></div>
+        <input type="range" id="l_turnover" min="0" max="60" step="1" value="30" oninput="calc()">
+      </div>
+      <div class="lever p">
+        <div class="lever-lbl"><span>Costo de reemplazo (% del salario anual)</span><span class="lever-val p" id="lv_replCost">40%</span></div>
+        <input type="range" id="l_replCost" min="10" max="200" step="5" value="40" oninput="calc()">
+      </div>
+      <div class="lever p">
+        <div class="lever-lbl"><span>Reducción de turnover con Cocoa</span><span class="lever-val p" id="lv_turnRed">15%</span></div>
+        <input type="range" id="l_turnRed" min="0" max="40" step="1" value="15" oninput="calc()">
+      </div>
+      <div class="lever p">
+        <div class="lever-lbl"><span>Productivity uplift</span><span class="lever-val p" id="lv_prod">5%</span></div>
+        <input type="range" id="l_prod" min="0" max="20" step="1" value="5" oninput="calc()">
+      </div>
+      <div class="lever p" style="grid-column:1 / -1">
+        <div class="lever-lbl"><span>% del pool variable pagado vía Cocoa</span><span class="lever-val p" id="lv_pctViaCocoa">60%</span></div>
+        <input type="range" id="l_pctViaCocoa" min="0" max="100" step="5" value="60" oninput="calc()">
+      </div>
+    </div>
+
+    <div class="res-row">
+      <div class="res p"><div class="res-lbl">Costo actual de turnover</div><div class="res-val" id="r_turnCost">Bs 0</div><div class="res-sub">Salidas × costo reemplazo × salario</div></div>
+      <div class="res p"><div class="res-lbl">Ahorro por reducción de turnover</div><div class="res-val" id="r_turnSav">Bs 0</div><div class="res-sub">Menos rotación → menos re-contratación</div></div>
+      <div class="res p"><div class="res-lbl">Ganancia de productividad</div><div class="res-val" id="r_prodGain">Bs 0</div><div class="res-sub">Engagement de Gallup · headcount × salario × uplift</div></div>
+      <div class="res p"><div class="res-lbl">Ahorro fiscal Variable Salary</div><div class="res-val" id="r_varSav">Bs 0</div><div class="res-sub">Evita 34.38% overhead planilla + CF 13%</div></div>
+    </div>
+    <div class="bucket-subtotal p"><span class="st-lbl">Subtotal Empleados / año</span><span class="st-val" id="st_emp">Bs 0</span></div>
+  </div>
+
+  <!-- BUCKET 2: CUSTOMER -->
+  <div class="bucket cust" id="bucket_cust">
+    <div class="bucket-head">
+      <div>
+        <div class="bucket-title">Bucket 2 · Clientes / Loyalty</div>
+        <div class="bucket-sub">Revenue incremental por retención, ticket promedio y referidos. Los beneficios se aplican solo sobre la base de miembros activos del programa Cocoa (no sobre todos los clientes), y se convierten a valor con el margen contributivo del negocio.</div>
+      </div>
+      <span class="bucket-badge t">Clientes</span>
+    </div>
+    <div class="bucket-empty-note">Sin clientes activos declarados — el bucket queda en cero. Ideal para negocios B2B puros.</div>
+
+    <div class="lever-grid">
+      <div class="lever t">
+        <div class="lever-lbl"><span>% Miembros del programa Cocoa</span><span class="lever-val t" id="lv_members">40%</span></div>
+        <input type="range" id="l_members" min="0" max="100" step="5" value="40" oninput="calc()">
+      </div>
+      <div class="lever t">
+        <div class="lever-lbl"><span>Retention uplift (clientes retenidos +%)</span><span class="lever-val t" id="lv_ret">6%</span></div>
+        <input type="range" id="l_ret" min="0" max="25" step="1" value="6" oninput="calc()">
+      </div>
+      <div class="lever t">
+        <div class="lever-lbl"><span>AOV uplift (ticket promedio +%)</span><span class="lever-val t" id="lv_aov">10%</span></div>
+        <input type="range" id="l_aov" min="0" max="30" step="1" value="10" oninput="calc()">
+      </div>
+      <div class="lever t">
+        <div class="lever-lbl"><span>Referral rate (nuevos clientes referidos %)</span><span class="lever-val t" id="lv_ref">5%</span></div>
+        <input type="range" id="l_ref" min="0" max="20" step="1" value="5" oninput="calc()">
+      </div>
+      <div class="lever t">
+        <div class="lever-lbl"><span>CAC actual estimado (Bs por cliente)</span><span class="lever-val t" id="lv_cac">Bs 200</span></div>
+        <input type="range" id="l_cac" min="0" max="1000" step="10" value="200" oninput="calc()">
+      </div>
+      <div class="lever t">
+        <div class="lever-lbl"><span>Margen contributivo</span><span class="lever-val t" id="lv_margin">25%</span></div>
+        <input type="range" id="l_margin" min="5" max="60" step="1" value="25" oninput="calc()">
+      </div>
+    </div>
+
+    <div class="res-row">
+      <div class="res t"><div class="res-lbl">Revenue incremental — retención</div><div class="res-val" id="r_retRev">Bs 0</div><div class="res-sub">Miembros × spend × retention uplift</div></div>
+      <div class="res t"><div class="res-lbl">Revenue incremental — AOV</div><div class="res-val" id="r_aovRev">Bs 0</div><div class="res-sub">Miembros × spend × AOV uplift</div></div>
+      <div class="res t"><div class="res-lbl">Revenue por referidos</div><div class="res-val" id="r_refRev">Bs 0</div><div class="res-sub">Referidos × spend anual</div></div>
+      <div class="res t"><div class="res-lbl">CAC ahorrado por referidos</div><div class="res-val" id="r_cacSav">Bs 0</div><div class="res-sub">Se cae a resultado directo</div></div>
+    </div>
+    <div class="bucket-subtotal t"><span class="st-lbl">Subtotal Clientes / año (aplicando margen)</span><span class="st-val" id="st_cust">Bs 0</span></div>
+  </div>
+
+  <!-- BUCKET 3: ADMIN -->
+  <div class="bucket admin">
+    <div class="bucket-head">
+      <div>
+        <div class="bucket-title">Bucket 3 · Tiempo administrativo</div>
+        <div class="bucket-sub">Horas de HR / Finanzas ahorradas mensualmente al eliminar el cálculo manual de aportes patronales, provisiones y reportes de variable comp.</div>
+      </div>
+      <span class="bucket-badge o">Admin</span>
+    </div>
+    <div class="lever-grid">
+      <div class="lever o">
+        <div class="lever-lbl"><span>Horas ahorradas / mes (por 100 colaboradores)</span><span class="lever-val o" id="lv_admHrs">24 h</span></div>
+        <input type="range" id="l_admHrs" min="0" max="80" step="1" value="24" oninput="calc()">
+      </div>
+      <div class="lever o">
+        <div class="lever-lbl"><span>Costo cargado / hora (Bs)</span><span class="lever-val o" id="lv_admCost">Bs 50</span></div>
+        <input type="range" id="l_admCost" min="20" max="250" step="5" value="50" oninput="calc()">
+      </div>
+    </div>
+    <div class="res-row" style="grid-template-columns:1fr 1fr">
+      <div class="res o"><div class="res-lbl">Horas anuales ahorradas</div><div class="res-val" id="r_admHours">0 h</div><div class="res-sub">HR + Finanzas · variable comp</div></div>
+      <div class="res o"><div class="res-lbl">Valor anual del tiempo ahorrado</div><div class="res-val" id="r_admValue">Bs 0</div><div class="res-sub">Convertido a costo cargado</div></div>
+    </div>
+    <div class="bucket-subtotal o"><span class="st-lbl">Subtotal Admin / año</span><span class="st-val" id="st_admin">Bs 0</span></div>
+  </div>
+
+  <!-- VERDICT -->
+  <div class="sec-lbl">Veredicto · valor total y ROI</div>
+  <div class="verdict">
+    <div class="verdict-head">
+      <span class="verdict-title">Valor neto anual entregado por Cocoa</span>
+      <div class="verdict-hero"><span id="v_total">Bs 0</span><small id="v_totalUSD">≈ USD 0</small></div>
+    </div>
+    <div class="verdict-grid">
+      <div class="v-cell"><span class="v-lbl">Costo anual de Cocoa</span><span class="v-val warn" id="v_cost">Bs 0</span><span class="v-sub" id="v_cost_sub">SaaS Bs 700 base + Bs 10/emp/mes</span></div>
+      <div class="v-cell"><span class="v-lbl">Ahorro / valor neto</span><span class="v-val pos" id="v_net">Bs 0</span><span class="v-sub">Valor entregado − costo Cocoa</span></div>
+      <div class="v-cell"><span class="v-lbl">ROI multiplier</span><span class="v-val pos" id="v_roi">0×</span><span class="v-sub">Por cada Bs pagado a Cocoa</span></div>
+      <div class="v-cell"><span class="v-lbl">Payback period</span><span class="v-val pos" id="v_payback">— meses</span><span class="v-sub" id="v_payback_sub">Costo ÷ valor mensual</span></div>
+    </div>
+  </div>
+
+  <div class="wf-wrap">
+    <div class="wf-title">Waterfall — contribución por bucket al valor total</div>
+    <div class="wf-bar">
+      <div class="wf-seg e" id="wf_e" style="flex:1"><span id="wf_e_lbl">Empleados</span></div>
+      <div class="wf-seg c" id="wf_c" style="flex:1"><span id="wf_c_lbl">Clientes</span></div>
+      <div class="wf-seg a" id="wf_a" style="flex:1"><span id="wf_a_lbl">Admin</span></div>
+    </div>
+    <div class="wf-legend">
+      <div class="wf-li"><span class="wf-dot" style="background:var(--purple)"></span>Empleados <span id="wf_e_pct" style="font-family:var(--mono);color:var(--ink);font-weight:600;margin-left:4px">0%</span></div>
+      <div class="wf-li"><span class="wf-dot" style="background:var(--teal)"></span>Clientes <span id="wf_c_pct" style="font-family:var(--mono);color:var(--ink);font-weight:600;margin-left:4px">0%</span></div>
+      <div class="wf-li"><span class="wf-dot" style="background:var(--orange)"></span>Admin <span id="wf_a_pct" style="font-family:var(--mono);color:var(--ink);font-weight:600;margin-left:4px">0%</span></div>
+    </div>
+  </div>
+
+  <div class="note">
+    <strong>Metodología y fuentes.</strong> Turnover cost: <em>SHRM 2023 (30–200% del salario según skill level)</em>. Loyalty program impact — retention/AOV: <em>Bond Loyalty Report 2024, Accenture</em>. Employee engagement productivity: <em>Gallup State of the Global Workplace 2023 (+18–23%)</em>. Los defaults por sector son conservadores dentro de los rangos publicados. <strong>Fórmula Variable Salary:</strong> ahorro = pool × (1+34.38%) − pool × (1+13%)(1−13%) = pool × 36.07%. <strong>Costo Cocoa:</strong> Bs 700/mes base + Bs 10/colab/mes; el service fee de 13% queda cubierto por el crédito fiscal IVA. <strong>TC BCB:</strong> Bs 6.96/USD. Calculadora referencial — validar los inputs con el equipo financiero del prospecto antes de comprometer números.
+  </div>
+
+  <div class="cta">
+    <div><h3>Validemos los números con tu equipo financiero</h3><p>En 30 minutos ajustamos las palancas al contexto real de la empresa y firmamos el business case.</p></div>
+    <button class="cta-btn">Agendar sesión de validación</button>
+  </div>
+
+</main>
+
+<footer class="footer">
+  Cocoa Business · Enterprise ROI Calculator · <span>luciano@cocoalatam.com</span>
+</footer>
+
+<script>
+const TC=6.96;
+const TOTAL_PATRON=0.3438,CF=0.13,FEE=0.13,SAAS_BASE=700,SAAS_PER_EMP=10;
+const SAVE_RATE=(1+TOTAL_PATRON)-(1+FEE)*(1-CF);
+
+const SECTORS={
+  retail:     {name:'Retail / Consumo',   avgSalary:48000, turnover:30, replCost:40, prod:5, pctVariable:12, members:40, retention:6, aov:10, referral:5},
+  financiero: {name:'Financiero',         avgSalary:80000, turnover:12, replCost:80, prod:6, pctVariable:15, members:30, retention:4, aov:6,  referral:3},
+  telecom:    {name:'Telecom / Media',    avgSalary:65000, turnover:20, replCost:60, prod:5, pctVariable:10, members:50, retention:8, aov:4,  referral:6},
+  industrial: {name:'Industrial / B2B',   avgSalary:55000, turnover:10, replCost:70, prod:7, pctVariable:8,  members:15, retention:2, aov:2,  referral:2},
+  servicios:  {name:'Servicios',          avgSalary:60000, turnover:18, replCost:60, prod:6, pctVariable:12, members:25, retention:4, aov:5,  referral:3}
+};
+
+const COMPANIES={
+  farmacorp: {name:'Farmacorp',    sector:'retail',     revenue:1200000000, employees:2500, customers:600000},
+  tigo:      {name:'Tigo Bolivia', sector:'telecom',    revenue:3200000000, employees:1400, customers:3500000},
+  cbn:       {name:'CBN',          sector:'industrial', revenue:2500000000, employees:2800, customers:0},
+  bnb:       {name:'BNB',          sector:'financiero', revenue:2100000000, employees:2300, customers:450000},
+  soboce:    {name:'SOBOCE',       sector:'industrial', revenue:1500000000, employees:1600, customers:0}
+};
+
+const fBs=n=>'Bs '+Math.round(n).toLocaleString('es-BO');
+const fBsK=n=>{const a=Math.abs(n);if(a>=1000000000)return 'Bs '+(n/1000000000).toFixed(2)+'B';if(a>=1000000)return 'Bs '+(n/1000000).toFixed(1)+'M';if(a>=1000)return 'Bs '+Math.round(n/1000)+'K';return fBs(n);};
+const fU=n=>'USD '+Math.round(n).toLocaleString('en-US');
+const fUK=n=>{const a=Math.abs(n);if(a>=1000000)return 'USD '+(n/1000000).toFixed(1)+'M';if(a>=1000)return 'USD '+Math.round(n/1000)+'K';return fU(n);};
+const fPct=n=>(n).toFixed(1)+'%';
+
+function applySector(key){
+  const s=SECTORS[key];if(!s)return;
+  document.getElementById('c_avgSalary').value=s.avgSalary;
+  document.getElementById('c_pctVariable').value=s.pctVariable;
+  document.getElementById('l_turnover').value=s.turnover;
+  document.getElementById('l_replCost').value=s.replCost;
+  document.getElementById('l_prod').value=s.prod;
+  document.getElementById('l_members').value=s.members;
+  document.getElementById('l_ret').value=s.retention;
+  document.getElementById('l_aov').value=s.aov;
+  document.getElementById('l_ref').value=s.referral;
+  document.getElementById('c_avgSalary_hint').textContent='Default sector: '+s.name;
+  document.getElementById('c_sector_hint').textContent='Palancas ajustadas al sector · editables';
+}
+
+function onSectorChange(){
+  const key=document.getElementById('c_sector').value;
+  applySector(key);
+  calc();
+}
+
+function loadPreset(key,btn){
+  document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  const c=COMPANIES[key];if(!c)return;
+  document.getElementById('prospect_name').value=c.name;
+  document.getElementById('c_sector').value=c.sector;
+  document.getElementById('c_revenue').value=c.revenue;
+  document.getElementById('c_employees').value=c.employees;
+  document.getElementById('c_customers').value=c.customers;
+  applySector(c.sector);
+  calc();
+}
+
+function calc(){
+  // --- Inputs
+  const prospect=(document.getElementById('prospect_name').value||'').trim();
+  const revenue=Math.max(0,parseFloat(document.getElementById('c_revenue').value)||0);
+  const employees=Math.max(1,parseInt(document.getElementById('c_employees').value)||1);
+  const customers=Math.max(0,parseFloat(document.getElementById('c_customers').value)||0);
+  const avgSalary=Math.max(0,parseFloat(document.getElementById('c_avgSalary').value)||0);
+  const pctVariable=Math.max(0,parseFloat(document.getElementById('c_pctVariable').value)||0)/100;
+  // Levers — employee
+  const turnoverRate=parseFloat(document.getElementById('l_turnover').value)/100;
+  const replCost=parseFloat(document.getElementById('l_replCost').value)/100;
+  const turnRed=parseFloat(document.getElementById('l_turnRed').value)/100;
+  const prod=parseFloat(document.getElementById('l_prod').value)/100;
+  const pctViaCocoa=parseFloat(document.getElementById('l_pctViaCocoa').value)/100;
+  // Levers — customer
+  const members=parseFloat(document.getElementById('l_members').value)/100;
+  const ret=parseFloat(document.getElementById('l_ret').value)/100;
+  const aov=parseFloat(document.getElementById('l_aov').value)/100;
+  const ref=parseFloat(document.getElementById('l_ref').value)/100;
+  const cac=parseFloat(document.getElementById('l_cac').value);
+  const margin=parseFloat(document.getElementById('l_margin').value)/100;
+  // Levers — admin
+  const admHrs=parseFloat(document.getElementById('l_admHrs').value);
+  const admCost=parseFloat(document.getElementById('l_admCost').value);
+
+  // --- Lever readouts
+  document.getElementById('lv_turnover').textContent=fPct(turnoverRate*100);
+  document.getElementById('lv_replCost').textContent=fPct(replCost*100);
+  document.getElementById('lv_turnRed').textContent=fPct(turnRed*100);
+  document.getElementById('lv_prod').textContent=fPct(prod*100);
+  document.getElementById('lv_pctViaCocoa').textContent=fPct(pctViaCocoa*100);
+  document.getElementById('lv_members').textContent=fPct(members*100);
+  document.getElementById('lv_ret').textContent=fPct(ret*100);
+  document.getElementById('lv_aov').textContent=fPct(aov*100);
+  document.getElementById('lv_ref').textContent=fPct(ref*100);
+  document.getElementById('lv_cac').textContent='Bs '+Math.round(cac);
+  document.getElementById('lv_margin').textContent=fPct(margin*100);
+  document.getElementById('lv_admHrs').textContent=Math.round(admHrs)+' h';
+  document.getElementById('lv_admCost').textContent='Bs '+Math.round(admCost);
+
+  // --- Employee bucket
+  const turnCost=employees*turnoverRate*replCost*avgSalary;
+  const turnSav=turnCost*turnRed;
+  const prodGain=employees*avgSalary*prod;
+  const variablePool=employees*avgSalary*pctVariable*pctViaCocoa;
+  const varSav=variablePool*SAVE_RATE;
+  const empSubtotal=turnSav+prodGain+varSav;
+
+  document.getElementById('r_turnCost').textContent=fBsK(turnCost);
+  document.getElementById('r_turnSav').textContent=fBsK(turnSav);
+  document.getElementById('r_prodGain').textContent=fBsK(prodGain);
+  document.getElementById('r_varSav').textContent=fBsK(varSav);
+  document.getElementById('st_emp').textContent=fBsK(empSubtotal);
+
+  // --- Customer bucket
+  const bucketCust=document.getElementById('bucket_cust');
+  let custSubtotal=0,retRev=0,aovRev=0,refRev=0,cacSav=0;
+  if(customers<=0){
+    bucketCust.classList.add('collapsed');
+  }else{
+    bucketCust.classList.remove('collapsed');
+    const memberBase=customers*members;
+    const avgSpend=customers>0?revenue/customers:0;
+    retRev=memberBase*avgSpend*ret;
+    aovRev=memberBase*avgSpend*aov;
+    const refCustomers=memberBase*ref;
+    refRev=refCustomers*avgSpend;
+    cacSav=refCustomers*cac;
+    custSubtotal=(retRev+aovRev+refRev)*margin+cacSav;
+    document.getElementById('r_retRev').textContent=fBsK(retRev);
+    document.getElementById('r_aovRev').textContent=fBsK(aovRev);
+    document.getElementById('r_refRev').textContent=fBsK(refRev);
+    document.getElementById('r_cacSav').textContent=fBsK(cacSav);
+    document.getElementById('st_cust').textContent=fBsK(custSubtotal);
+  }
+
+  // --- Admin bucket
+  const admHoursAnnual=admHrs*(employees/100)*12;
+  const admValue=admHoursAnnual*admCost;
+  document.getElementById('r_admHours').textContent=Math.round(admHoursAnnual).toLocaleString('es-BO')+' h';
+  document.getElementById('r_admValue').textContent=fBsK(admValue);
+  document.getElementById('st_admin').textContent=fBsK(admValue);
+
+  // --- Cocoa cost (SaaS only; service fee is offset by CF)
+  const cocoaCostAnnual=(SAAS_BASE+SAAS_PER_EMP*employees)*12;
+
+  // --- Totals + verdict
+  const totalValue=empSubtotal+custSubtotal+admValue;
+  const netValue=totalValue-cocoaCostAnnual;
+  const roi=cocoaCostAnnual>0?totalValue/cocoaCostAnnual:0;
+  const monthlyValue=totalValue/12;
+  const payback=monthlyValue>0?cocoaCostAnnual/monthlyValue:0; // months
+  const totalUSD=totalValue/TC;
+
+  document.getElementById('v_total').textContent=fBsK(totalValue);
+  document.getElementById('v_totalUSD').textContent='≈ '+fUK(totalUSD);
+  document.getElementById('v_cost').textContent=fBsK(cocoaCostAnnual);
+  document.getElementById('v_cost_sub').textContent='Bs '+Math.round((SAAS_BASE+SAAS_PER_EMP*employees)).toLocaleString('es-BO')+'/mes · SaaS Enterprise';
+  document.getElementById('v_net').textContent=fBsK(netValue);
+  document.getElementById('v_roi').textContent=(roi<10?roi.toFixed(1):Math.round(roi))+'×';
+  const paybackLbl=payback<1?(payback*30).toFixed(1)+' días':(payback<12?payback.toFixed(1)+' meses':(payback/12).toFixed(1)+' años');
+  document.getElementById('v_payback').textContent=paybackLbl;
+  document.getElementById('v_payback_sub').textContent='Costo Bs '+Math.round(cocoaCostAnnual/12).toLocaleString('es-BO')+'/mes ÷ valor Bs '+Math.round(monthlyValue).toLocaleString('es-BO')+'/mes';
+
+  // --- Hero
+  document.getElementById('hero_prospect').textContent=prospect||'tu empresa';
+  document.getElementById('hero_value').textContent=fBsK(netValue>0?netValue:totalValue);
+  document.getElementById('hk_total').textContent=fBsK(totalValue);
+  document.getElementById('hk_payback').textContent=paybackLbl;
+  document.getElementById('hk_roi').textContent=(roi<10?roi.toFixed(1):Math.round(roi))+'×';
+  document.getElementById('hk_emp').textContent=fBsK(empSubtotal);
+  document.getElementById('hk_cust').textContent=customers>0?fBsK(custSubtotal):'—';
+
+  // --- Hints
+  document.getElementById('c_revenue_hint').textContent='≈ '+fUK(revenue/TC);
+  document.getElementById('c_employees_hint').textContent=(employees).toLocaleString('es-BO')+' colaboradores';
+
+  // --- Waterfall
+  const denom=Math.max(totalValue,1);
+  const eF=Math.max(1,(empSubtotal/denom)*100);
+  const cF=Math.max(customers>0?1:0.001,(custSubtotal/denom)*100);
+  const aF=Math.max(0.5,(admValue/denom)*100);
+  document.getElementById('wf_e').style.flex=eF;
+  document.getElementById('wf_c').style.flex=customers>0?cF:0.001;
+  document.getElementById('wf_a').style.flex=aF;
+  document.getElementById('wf_e_lbl').textContent=(empSubtotal/denom*100).toFixed(0)+'%';
+  document.getElementById('wf_c_lbl').textContent=customers>0?(custSubtotal/denom*100).toFixed(0)+'%':'';
+  document.getElementById('wf_a_lbl').textContent=(admValue/denom*100).toFixed(0)+'%';
+  document.getElementById('wf_e_pct').textContent=(empSubtotal/denom*100).toFixed(1)+'%';
+  document.getElementById('wf_c_pct').textContent=customers>0?(custSubtotal/denom*100).toFixed(1)+'%':'—';
+  document.getElementById('wf_a_pct').textContent=(admValue/denom*100).toFixed(1)+'%';
+}
+
+// --- Init
+loadPreset('farmacorp',document.querySelector('.preset-btn[data-key="farmacorp"]'));
+</script>
+</body>
+</html>
